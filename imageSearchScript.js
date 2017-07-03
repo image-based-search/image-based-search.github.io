@@ -11,6 +11,19 @@
 		xmlhttp.onreadystatechange = function () {
 		  if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 		    result = xmlhttp.responseText;
+		    var obj=JSON.parse(result);
+		    //console.log(obj);
+		    try{
+		    	var make=obj.objects[0].vehicleAnnotation.attributes.system.make.name;
+		    	$("input[type=checkbox][name=make]").each(function(){
+		    		if($(this).val().toLowerCase().indexOf(make.toLowerCase())!==-1){
+		    			$(this).trigger("click");
+		    		}
+		    	});
+		    }catch(exjs){
+		    	/*handle failure here*/
+		    	console.log("Error:",exjs);
+		    }
 		  }
 		}
 	
@@ -65,8 +78,8 @@
 	
 	var fileInputField=document.createElement("input");
 	fileInputField.type="file";
-	fileInputField.name="xyz";
-	fileInputField.id="xyz";
+	fileInputField.name="fileinputfield";
+	fileInputField.id="fileinputfield";
 	fileInputField.style.display="none";
 	frag.appendChild(fileInputField);
 	
@@ -87,7 +100,7 @@
 		fileInputField.click();
 	});
 	
-	$("#xyz").on("change",function(e){
+	$("#fileinputfield").on("change",function(e){
 		_handleFileUpload(e);
 	});
 	window.imageSearchScriptInjected=true;
