@@ -20,6 +20,10 @@
 		    			$(this).trigger("click");
 		    		}
 		    	});
+		    	setTimeout(function(){
+		    		document.documentElement.scrollTop=0;
+		    		document.body.scrollTop=0;
+		    	},100);
 		    }catch(exjs){
 		    	/*handle failure here*/
 		    	console.log("Error:",exjs);
@@ -109,6 +113,5 @@
 /*
 
 javascript:(function(){var scr=document.createElement("script");scr.src="https://image-based-search.github.io/imageSearchScript.js";document.getElementsByTagName("head")[0].appendChild(scr);}());
-
 
 */
