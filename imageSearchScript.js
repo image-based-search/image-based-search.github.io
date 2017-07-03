@@ -12,7 +12,6 @@
 		  if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 		    result = xmlhttp.responseText;
 		    var obj=JSON.parse(result);
-		    //console.log(obj);
 		    try{
 		    	var make=obj.objects[0].vehicleAnnotation.attributes.system.make.name;
 		    	$("input[type=checkbox][name=make]").each(function(){
@@ -20,10 +19,15 @@
 		    			$(this).trigger("click");
 		    		}
 		    	});
-		    	setTimeout(function(){
-		    		document.documentElement.scrollTop=0;
-		    		document.body.scrollTop=0;
-		    	},100);
+		    	var checkAriaBusy=function(){
+		    		if($("[aria-busy]")[0] && $("[aria-busy]")[0].getAttribute("aria-busy")==="true"){
+			    		document.documentElement.scrollTop=0;
+			    		document.body.scrollTop=0;
+		    		}else{
+		    			setTimeout(function(){checkAriaBusy();},100);
+		    		}
+		    	};
+		    	checkAriaBusy();
 		    }catch(exjs){
 		    	/*handle failure here*/
 		    	console.log("Error:",exjs);
@@ -111,6 +115,8 @@
 }());
 
 /*
+
+bookmarklet code:
 
 javascript:(function(){var scr=document.createElement("script");scr.src="https://image-based-search.github.io/imageSearchScript.js";document.getElementsByTagName("head")[0].appendChild(scr);}());
 
