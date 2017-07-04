@@ -3,13 +3,20 @@
 		return;
 	}
 	
-	var checkAriaBusy=function(){
+	var checkAriaBusy=function(cb){
 		if($("[aria-busy]")[0] && $("[aria-busy]")[0].getAttribute("aria-busy")==="true"){
     		document.documentElement.scrollTop=0;
     		document.body.scrollTop=0;
     		showProcessing(false);
+    		if((typeof cb)==="function"){
+    			setTimeout(function(){cb();},0);
+    		}
 		}else{
-			setTimeout(function(){checkAriaBusy();},100);
+			if((typeof cb)==="function"){
+				setTimeout(function(){checkAriaBusy(cb);},100);
+			}else{
+				setTimeout(function(){checkAriaBusy();},100);
+			}
 		}
 	};
 
@@ -23,16 +30,48 @@
 		    result = xmlhttp.responseText;
 		    var obj=JSON.parse(result);
 		    try{
+		    	var vehicleFound=false;
 		    	var make=obj.objects[0].vehicleAnnotation.attributes.system.make.name;
+		    	var model=obj.objects[0].vehicleAnnotation.attributes.system.model.name;
+		    	var color=obj.objects[0].vehicleAnnotation.attributes.system.color.name;
+
 		    	$("input[type=checkbox][name=make]").each(function(){
 		    		if($(this).val().toLowerCase().indexOf(make.toLowerCase())!==-1){
 		    			$(this).trigger("click");
-				    	checkAriaBusy();
+		    			vehicleFound=true;
 		    		}
 		    	});
+		    	if(vehicleFound){
+		    		checkAriaBusy(function(){
+		    			var checkModelAndColorEntries=function(){
+		    				if(!$("input[type=checkbox][name=model]")[0] || !$("input[type=checkbox][name=bodyColor]")){
+		    					setTimeout(function(){
+		    						checkModelAndColorEntries();
+		    					},50);
+		    				}else{
+				    			var modelOrColorFound=false;
+		    					$("input[type=checkbox][name=model]").each(function(){
+						    		if($(this).val().toLowerCase().indexOf(model.toLowerCase())!==-1){
+						    			$(this).trigger("click");
+						    			modelOrColorFound=true;
+						    		}
+						    	});
+						    	$("input[type=checkbox][name=bodyColor]").each(function(){
+						    		if($(this).val().toLowerCase().indexOf(color.toLowerCase())!==-1){
+						    			$(this).trigger("click");
+						    			modelOrColorFound=true;
+						    		}
+						    	});
+						    	if(modelOrColorFound){
+						    		checkAriaBusy();
+						    	}
+		    				}
+		    			};
+		    			checkModelAndColorEntries();
+		    		});
+		    	}
 		    }catch(exjs){
 		    	/*handle failure here*/
-		    	console.log("Error:",exjs);
 		    }
 		  }
 		}
