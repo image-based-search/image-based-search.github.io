@@ -43,6 +43,12 @@
 		    	$("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail,$("#imgSearchBtn")[0]);
 		    	thumbnail.title="Make: "+make+", Model:"+model+", Color: "+color;
 		    	
+		    	if(!$("input[type=checkbox][name=make]")[0]){
+		    		$("[name=searchQuery]").val(make+" "+model+" "+color);
+		    		$("[name=searchQuery]").parents("form:eq(0)").submit();
+		    		return;
+		    	}
+		    	
 		    	$("input[type=checkbox][name=make],input[type=checkbox][name=model],input[type=checkbox][name=bodyColor]").each(function(){
 	    			$(this)[0].checked=false;
 	    			$(this).attr("syncstate","loaded");
