@@ -35,11 +35,11 @@
 		    	var color=obj.objects[0].vehicleAnnotation.attributes.system.color.name;
 
 		    	var thumbnail=document.createElement("img");
-				thumbnail.src=e;
-				thumbnail.style.width="70px";
-				thumbnail.style.position="absolute";
-				thumbnail.style.left="-165px";
-				$("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail,$("#imgSearchBtn")[0]);
+		    	thumbnail.src=e;
+		    	thumbnail.style.width="70px";
+		    	thumbnail.style.position="absolute";
+		    	thumbnail.style.left="-165px";
+		    	$("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail,$("#imgSearchBtn")[0]);
 		    	thumbnail.title="Make: "+make+", Model:"+model+", Color: "+color;
 
 		    	$("input[type=checkbox][name=make]").each(function(){
