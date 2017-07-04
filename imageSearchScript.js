@@ -24,7 +24,6 @@
 		var image = r; 
 		var xmlhttp = new XMLHttpRequest();
 		var result;
-	
 		xmlhttp.onreadystatechange = function () {
 		  if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
 		    result = xmlhttp.responseText;
@@ -34,6 +33,14 @@
 		    	var make=obj.objects[0].vehicleAnnotation.attributes.system.make.name;
 		    	var model=obj.objects[0].vehicleAnnotation.attributes.system.model.name;
 		    	var color=obj.objects[0].vehicleAnnotation.attributes.system.color.name;
+
+		    	var thumbnail=document.createElement("img");
+				thumbnail.src=e;
+				thumbnail.style.width="70px";
+				thumbnail.style.position="absolute";
+				thumbnail.style.left="-165px";
+				$("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail,$("#imgSearchBtn")[0]);
+		    	thumbnail.title="Make: "+make+", Model:"+model+", Color: "+color;
 
 		    	$("input[type=checkbox][name=make]").each(function(){
 		    		if($(this).val().toLowerCase().indexOf(make.toLowerCase())!==-1){
