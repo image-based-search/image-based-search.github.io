@@ -36,12 +36,18 @@
 
 		    	var thumbnail=document.createElement("img");
 		    	thumbnail.src=e;
+		    	thumbnail.id="thumbnailImage";
 		    	thumbnail.style.width="70px";
 		    	thumbnail.style.position="absolute";
 		    	thumbnail.style.left="-165px";
 		    	$("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail,$("#imgSearchBtn")[0]);
 		    	thumbnail.title="Make: "+make+", Model:"+model+", Color: "+color;
-
+		    	
+		    	$("input[type=checkbox][name=make],input[type=checkbox][name=model],input[type=checkbox][name=bodyColor]").each(function(){
+	    			$(this)[0].checked=false;
+	    			$(this).attr("syncstate","loaded");
+		    	});
+		    	
 		    	$("input[type=checkbox][name=make]").each(function(){
 		    		if($(this).val().toLowerCase().indexOf(make.toLowerCase())!==-1){
 		    			$(this).trigger("click");
@@ -51,12 +57,15 @@
 		    	if(vehicleFound){
 		    		checkAriaBusy(function(){
 		    			var checkModelAndColorEntries=function(){
-		    				if(!$("input[type=checkbox][name=model]")[0] || !$("input[type=checkbox][name=bodyColor]")){
+		    				if(!$("input[type=checkbox][name=model]")[0] 
+		    					|| !$("input[type=checkbox][name=bodyColor]") 
+		    					|| $($("input[type=checkbox][name=model]")[0]).attr("syncstate")==="loaded" 
+		    					|| $($("input[type=checkbox][name=bodyColor]")[0]).attr("syncstate")==="loaded"){
 		    					setTimeout(function(){
 		    						checkModelAndColorEntries();
 		    					},50);
 		    				}else{
-				    			var modelOrColorFound=false;
+		    					var modelOrColorFound=false;
 		    					$("input[type=checkbox][name=model]").each(function(){
 						    		if($(this).val().toLowerCase().indexOf(model.toLowerCase())!==-1){
 						    			$(this).trigger("click");
@@ -106,6 +115,9 @@
 		a.length > 185 && (a = a.substr(0, 184) + "...");
 		processSelectedImage(e, a, t);
 		showProcessing(true);
+		if($("#thumbnailImage")[0]){
+			$("#thumbnailImage")[0].parentNode.removeChild($("#thumbnailImage")[0]);
+		}
 	};
 	var interval=0;
 	var showProcessing=function(o){
