@@ -37,9 +37,12 @@
 		    	var thumbnail=document.createElement("img");
 		    	thumbnail.src=e;
 		    	thumbnail.id="thumbnailImage";
-		    	thumbnail.style.width="70px";
+		    	thumbnail.style.height="30px";
 		    	thumbnail.style.position="absolute";
-		    	thumbnail.style.left="-165px";
+		    	thumbnail.style.right="95px";
+		    	thumbnail.style.top="26px";
+		    	thumbnail.style.zIndex=5;
+		    	thumbnail.style.borderRadius="7px";
 		    	$("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail,$("#imgSearchBtn")[0]);
 		    	thumbnail.title="Make: "+make+", Model:"+model+", Color: "+color;
 		    	
@@ -125,18 +128,12 @@
 			$("#thumbnailImage")[0].parentNode.removeChild($("#thumbnailImage")[0]);
 		}
 	};
-	var interval=0;
+
 	var showProcessing=function(o){
 		if(!o){
-			clearInterval(interval);
-			$("#imgSearchBtn").html("Image Search");
+			$("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/camera.png\">");
 		}else{
-			var msgs=["Processing .","Processing . .","Processing . . ."];
-			var ctr=0;
-			interval=setInterval(function(){
-				$("#imgSearchBtn").html(msgs[ctr%3]);
-				ctr++;
-			},200);
+			$("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:-4px;\">");
 		}
 	};
 	var processSelectedImage=function(e, t, r) {
@@ -161,8 +158,12 @@
             analyzeImage(e, r)
         };
 	
+	$("div.menu").css("flex-basis","60%");
+	new Image().src="https://image-based-search.github.io/images/loading_spinner.gif";
+
 	var frag=document.createDocumentFragment();
 	var searchForm=$("[name=searchQuery]").parents("form:eq(0)")[0];
+	searchForm.style.zIndex=2;
 	
 	var fileInputField=document.createElement("input");
 	fileInputField.type="file";
@@ -172,14 +173,15 @@
 	frag.appendChild(fileInputField);
 	
 	var imgSearchBtn=document.createElement("div");
-	imgSearchBtn.innerHTML="Image Search";
+	imgSearchBtn.innerHTML="<img src=\"https://image-based-search.github.io/images/camera.png\">";
 	imgSearchBtn.id="imgSearchBtn";
 	imgSearchBtn.style.display="inline-block";
 	imgSearchBtn.style.textTransform="none";
 	imgSearchBtn.style.fontWeight="bold";
 	imgSearchBtn.style.position="absolute";
-	imgSearchBtn.style.top="30px";
-	imgSearchBtn.style.left="-85px";
+	imgSearchBtn.style.top="24px";
+	imgSearchBtn.style.right="55px";
+	imgSearchBtn.style.zIndex=5;
 	frag.appendChild(imgSearchBtn);
 	
 	searchForm.parentNode.appendChild(frag);
