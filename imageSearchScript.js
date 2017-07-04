@@ -105,16 +105,16 @@
 	};
 	
 	var _handleFileUpload=function(e) {
-        var t, r = e.target.files[0];
-        if (r instanceof Blob) {
-            var a = new FileReader;
-            a.onload = function(e) {
-                t = e.target.result,
-                handleImageUpload(t, r)
-            };
-            a.readAsDataURL(r);
-        }
-    }
+		var t, r = e.target.files[0];
+		if (r instanceof Blob) {
+			var a = new FileReader;
+			a.onload = function(e) {
+				t = e.target.result,
+				handleImageUpload(t, r)
+			};
+			a.readAsDataURL(r);
+		}
+	};
 	
 	var handleImageUpload=function(e, t) {
 		var r = e, a = r.split(",")[1];
