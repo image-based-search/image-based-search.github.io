@@ -3,6 +3,16 @@
 		return;
 	}
 	
+	var checkAriaBusy=function(){
+		if($("[aria-busy]")[0] && $("[aria-busy]")[0].getAttribute("aria-busy")==="true"){
+    		document.documentElement.scrollTop=0;
+    		document.body.scrollTop=0;
+    		showProcessing(false);
+		}else{
+			setTimeout(function(){checkAriaBusy();},100);
+		}
+	};
+
 	var analyzeImage=function(e,r){
 		var image = r; 
 		var xmlhttp = new XMLHttpRequest();
@@ -17,17 +27,9 @@
 		    	$("input[type=checkbox][name=make]").each(function(){
 		    		if($(this).val().toLowerCase().indexOf(make.toLowerCase())!==-1){
 		    			$(this).trigger("click");
+				    	checkAriaBusy();
 		    		}
 		    	});
-		    	var checkAriaBusy=function(){
-		    		if($("[aria-busy]")[0] && $("[aria-busy]")[0].getAttribute("aria-busy")==="true"){
-			    		document.documentElement.scrollTop=0;
-			    		document.body.scrollTop=0;
-		    		}else{
-		    			setTimeout(function(){checkAriaBusy();},100);
-		    		}
-		    	};
-		    	checkAriaBusy();
 		    }catch(exjs){
 		    	/*handle failure here*/
 		    	console.log("Error:",exjs);
@@ -55,10 +57,24 @@
 	
 	var handleImageUpload=function(e, t) {
 		var r = e, a = r.split(",")[1];
-		a.length > 185 && (a = a.substr(0, 184) + "..."),
-		processSelectedImage(e, a, t)
+		a.length > 185 && (a = a.substr(0, 184) + "...");
+		processSelectedImage(e, a, t);
+		showProcessing(true);
 	};
-	
+	var interval=0;
+	var showProcessing=function(o){
+		if(!o){
+			clearInterval(interval);
+			$("#imgSearchBtn").html("Image Search");
+		}else{
+			var msgs=["Processing .","Processing . .","Processing . . ."];
+			var ctr=0;
+			interval=setInterval(function(){
+				$("#imgSearchBtn").html(msgs[ctr%3]);
+				ctr++;
+			},200);
+		}
+	};
 	var processSelectedImage=function(e, t, r) {
         var a = {
                 contentType: "",
