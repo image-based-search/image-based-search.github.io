@@ -3,21 +3,24 @@
         return;
     }
 
-    var checkAriaBusy = function(cb) {
-        if ($("[aria-busy]")[0] && $("[aria-busy]")[0].getAttribute("aria-busy") === "true") {
+    var checkBusyStatus = function(cb) {
+        $("form[name=vehicleFilter]").attr("syncstate", "waiting");
+        var _chk = function(cb) {
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
-            showProcessing(false);
-            if ((typeof cb) === "function") {
+            if ($("form[name=vehicleFilter").attr("syncstate") !== "waiting") {
+                if ((typeof cb) === "function") {
+                    setTimeout(function() {
+                        cb();
+                    }, 0);
+                }
+            } else {
                 setTimeout(function() {
-                    cb();
-                }, 0);
+                    _chk(cb);
+                }, 100);
             }
-        } else {
-            setTimeout(function() {
-                checkAriaBusy(cb);
-            }, 100);
-        }
+        };
+        _chk(cb);
     };
 
     var analyzeImage = function(e, r) {
@@ -64,7 +67,7 @@
                         }
                     });
                     if (vehicleFound) {
-                        checkAriaBusy(function() {
+                        checkBusyStatus(function() {
                             var checkModelEntries = function() {
                                 if (!$("input[type=checkbox][name=model]")[0] || $($("input[type=checkbox][name=model]")[0]).attr("syncstate") === "loaded") {
                                     setTimeout(function() {
@@ -86,7 +89,7 @@
                                     });
 
                                     if (modelFound) {
-                                        checkAriaBusy(function() {
+                                        checkBusyStatus(function() {
                                             var checkColorEntries = function() {
                                                 if (!$("input[type=checkbox][name=bodyColor]")[0] || $($("input[type=checkbox][name=bodyColor]")[0]).attr("syncstate") === "loaded") {
                                                     setTimeout(function() {
@@ -101,17 +104,17 @@
                                                         }
                                                     });
                                                     if (colorFound) {
-                                                        checkAriaBusy(function() {
-                                                            setTimeout(function() {
-                                                                $("#bodyMaskElement").css({
-                                                                    "display": "none"
-                                                                });
-                                                            }, 1000);
+                                                        checkBusyStatus(function() {
+                                                            $("#bodyMaskElement").css({
+                                                                "display": "none"
+                                                            });
+                                                            showProcessing(false);
                                                         });
                                                     } else {
                                                         $("#bodyMaskElement").css({
                                                             "display": "none"
                                                         });
+                                                        showProcessing(false);
                                                     }
                                                 }
                                             };
@@ -121,6 +124,7 @@
                                         $("#bodyMaskElement").css({
                                             "display": "none"
                                         });
+                                        showProcessing(false);
                                     }
                                 }
                             };
@@ -130,12 +134,14 @@
                         $("#bodyMaskElement").css({
                             "display": "none"
                         });
+                        showProcessing(false);
                     }
                 } catch (exjs) {
                     /*handle failure here*/
                     $("#bodyMaskElement").css({
                         "display": "none"
                     });
+                    showProcessing(false);
                 }
             }
         }
@@ -164,13 +170,13 @@
           , a = r.split(",")[1];
         a.length > 185 && (a = a.substr(0, 184) + "...");
         processSelectedImage(e, a, t);
-        showProcessing(true);
         if ($("#thumbnailImage")[0]) {
             $("#thumbnailImage")[0].parentNode.removeChild($("#thumbnailImage")[0]);
         }
         $("#bodyMaskElement").css({
             "display": "block"
         });
+        showProcessing(true);
     };
 
     var showProcessing = function(o) {
