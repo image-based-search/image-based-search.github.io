@@ -36,7 +36,13 @@
                     var make = obj.objects[0].vehicleAnnotation.attributes.system.make.name;
                     var model = obj.objects[0].vehicleAnnotation.attributes.system.model.name;
                     var color = obj.objects[0].vehicleAnnotation.attributes.system.color.name;
-
+                    if (!make) {
+                        showProcessing(false);
+                        $("#bodyMaskElement").css({
+                            "display": "none"
+                        });
+                        return;
+                    }
                     var thumbnail = document.createElement("img");
                     thumbnail.src = e;
                     thumbnail.id = "thumbnailImage";
