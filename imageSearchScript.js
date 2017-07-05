@@ -65,34 +65,48 @@
 		    	});
 		    	if(vehicleFound){
 		    		checkAriaBusy(function(){
-		    			var checkModelAndColorEntries=function(){
-		    				if(!$("input[type=checkbox][name=model]")[0] 
-		    					|| !$("input[type=checkbox][name=bodyColor]") 
-		    					|| $($("input[type=checkbox][name=model]")[0]).attr("syncstate")==="loaded" 
-		    					|| $($("input[type=checkbox][name=bodyColor]")[0]).attr("syncstate")==="loaded"){
+		    			var checkModelEntries=function(){
+		    				if(!$("input[type=checkbox][name=model]")[0] || $($("input[type=checkbox][name=model]")[0]).attr("syncstate")==="loaded"){
 		    					setTimeout(function(){
-		    						checkModelAndColorEntries();
+		    						checkModelEntries();
 		    					},50);
 		    				}else{
-		    					var modelOrColorFound=false;
+		    					var modelFound=false;
+		    					
+		    					$("input[type=checkbox][name=bodyColor]").each(function(){
+		    		    			$(this)[0].checked=false;
+		    		    			$(this).attr("syncstate","loaded");
+		    			    	});
+		    					
 		    					$("input[type=checkbox][name=model]").each(function(){
 						    		if($(this).val().toLowerCase().indexOf(model.toLowerCase())!==-1){
 						    			$(this).trigger("click");
-						    			modelOrColorFound=true;
+						    			modelFound=true;
 						    		}
 						    	});
-						    	$("input[type=checkbox][name=bodyColor]").each(function(){
-						    		if($(this).val().toLowerCase().indexOf(color.toLowerCase())!==-1){
-						    			$(this).trigger("click");
-						    			modelOrColorFound=true;
-						    		}
-						    	});
-						    	if(modelOrColorFound){
-						    		checkAriaBusy();
+		    					
+						    	if(modelFound){
+						    		checkAriaBusy(function(){
+						    			var checkColorEntries=function(){
+						    				if(!$("input[type=checkbox][name=bodyColor]")[0] || $($("input[type=checkbox][name=bodyColor]")[0]).attr("syncstate")==="loaded"){
+						    					setTimeout(function(){
+						    						checkColorEntries();
+						    					},50);
+						    				}else{
+								    			$("input[type=checkbox][name=bodyColor]").each(function(){
+										    		if($(this).val().toLowerCase().indexOf(color.toLowerCase())!==-1){
+										    			$(this).trigger("click");
+										    			checkAriaBusy();
+										    		}
+										    	});
+						    				}
+						    			};
+						    			checkColorEntries();
+						    		});
 						    	}
 		    				}
 		    			};
-		    			checkModelAndColorEntries();
+		    			checkModelEntries();
 		    		});
 		    	}
 		    }catch(exjs){
