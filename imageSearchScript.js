@@ -14,15 +14,9 @@
                 }, 0);
             }
         } else {
-            if ((typeof cb) === "function") {
-                setTimeout(function() {
-                    checkAriaBusy(cb);
-                }, 100);
-            } else {
-                setTimeout(function() {
-                    checkAriaBusy();
-                }, 100);
-            }
+            setTimeout(function() {
+                checkAriaBusy(cb);
+            }, 100);
         }
     };
 
@@ -45,7 +39,7 @@
                     thumbnail.id = "thumbnailImage";
                     thumbnail.style.height = "30px";
                     thumbnail.style.position = "absolute";
-                    thumbnail.style.right = "95px";
+                    thumbnail.style.left = "58px";
                     thumbnail.style.top = "26px";
                     thumbnail.style.zIndex = 5;
                     thumbnail.style.borderRadius = "7px";
@@ -99,23 +93,49 @@
                                                         checkColorEntries();
                                                     }, 50);
                                                 } else {
+                                                    var colorFound = false;
                                                     $("input[type=checkbox][name=bodyColor]").each(function() {
                                                         if ($(this).val().toLowerCase().indexOf(color.toLowerCase()) !== -1) {
                                                             $(this).trigger("click");
-                                                            checkAriaBusy();
+                                                            colorFound = true;
                                                         }
                                                     });
+                                                    if (colorFound) {
+                                                        checkAriaBusy(function() {
+                                                            setTimeout(function() {
+                                                                $("#bodyMaskElement").css({
+                                                                    "display": "none"
+                                                                });
+                                                            }, 1000);
+                                                        });
+                                                    } else {
+                                                        $("#bodyMaskElement").css({
+                                                            "display": "none"
+                                                        });
+                                                    }
                                                 }
                                             };
                                             checkColorEntries();
+                                        });
+                                    } else {
+                                        $("#bodyMaskElement").css({
+                                            "display": "none"
                                         });
                                     }
                                 }
                             };
                             checkModelEntries();
                         });
+                    } else {
+                        $("#bodyMaskElement").css({
+                            "display": "none"
+                        });
                     }
-                } catch (exjs) {/*handle failure here*/
+                } catch (exjs) {
+                    /*handle failure here*/
+                    $("#bodyMaskElement").css({
+                        "display": "none"
+                    });
                 }
             }
         }
@@ -148,13 +168,16 @@
         if ($("#thumbnailImage")[0]) {
             $("#thumbnailImage")[0].parentNode.removeChild($("#thumbnailImage")[0]);
         }
+        $("#bodyMaskElement").css({
+            "display": "block"
+        });
     };
 
     var showProcessing = function(o) {
         if (!o) {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/camera.png\">");
         } else {
-            $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:-4px;\">");
+            $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:4px;\">");
         }
     };
     var processSelectedImage = function(e, t, r) {
@@ -186,6 +209,8 @@
     var searchForm = $("[name=searchQuery]").parents("form:eq(0)")[0];
     searchForm.style.zIndex = 2;
 
+    $("[name=searchQuery]").css("padding-left", "110px");
+
     var fileInputField = document.createElement("input");
     fileInputField.type = "file";
     fileInputField.name = "fileinputfield";
@@ -201,9 +226,18 @@
     imgSearchBtn.style.fontWeight = "bold";
     imgSearchBtn.style.position = "absolute";
     imgSearchBtn.style.top = "24px";
-    imgSearchBtn.style.right = "55px";
+    imgSearchBtn.style.left = "20px";
     imgSearchBtn.style.zIndex = 5;
     frag.appendChild(imgSearchBtn);
+
+    var divider = document.createElement("div");
+    divider.style.borderRight = "1px solid #000";
+    divider.style.height = "30px";
+    divider.style.position = "absolute";
+    divider.style.left = "120px";
+    divider.style.top = "25px";
+    divider.style.zIndex = 5;
+    frag.appendChild(divider);
 
     searchForm.parentNode.appendChild(frag);
 
@@ -214,6 +248,17 @@
     $("#fileinputfield").on("change", function(e) {
         _handleFileUpload(e);
     });
+
+    var bodyMask = document.createElement("div");
+    bodyMask.style.position = "fixed";
+    bodyMask.style.top = bodyMask.style.right = bodyMask.style.bottom = bodyMask.style.left = "0px";
+    bodyMask.style.opacity = 0.8;
+    bodyMask.style.backgroundColor = "#000";
+    bodyMask.style.zIndex = Math.pow(2, 32) - 1;
+    bodyMask.style.display = "none";
+    bodyMask.id = "bodyMaskElement";
+    document.body.appendChild(bodyMask);
+
     window.imageSearchScriptInjected = true;
 }());
 
