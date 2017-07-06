@@ -149,7 +149,7 @@
                     });
                     showProcessing(false);
                 }
-            }else if(xmlhttp.readyState === 4 && xmlhttp.status === 200){
+            }else if(xmlhttp.readyState === 4 && xmlhttp.status !== 200){
             	$("#bodyMaskElement").css({
                     "display": "none"
                 });
