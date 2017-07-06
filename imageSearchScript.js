@@ -43,6 +43,10 @@
                         });
                         return;
                     }
+
+                    $("#searchBarDivider").addClass("shiftRight");
+                    $("input[name=searchQuery]").addClass("shiftRight");
+
                     var thumbnail = document.createElement("img");
                     thumbnail.src = e;
                     thumbnail.id = "thumbnailImage";
@@ -52,8 +56,10 @@
                     thumbnail.style.top = "26px";
                     thumbnail.style.zIndex = 5;
                     thumbnail.style.borderRadius = "7px";
-                    $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
                     thumbnail.title = "Make: " + make + ", Model:" + model + ", Color: " + color;
+                    setTimeout(function() {
+                        $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
+                    }, 1000);
 
                     if (!$("input[type=checkbox][name=make]")[0]) {
                         $("[name=searchQuery]").val(make + " " + model + " " + color);
@@ -149,6 +155,11 @@
                     });
                     showProcessing(false);
                 }
+            } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
+                $("#bodyMaskElement").css({
+                    "display": "none"
+                });
+                showProcessing(false);
             }
         }
 
@@ -179,6 +190,10 @@
         if ($("#thumbnailImage")[0]) {
             $("#thumbnailImage")[0].parentNode.removeChild($("#thumbnailImage")[0]);
         }
+
+        $("#searchBarDivider").removeClass("shiftRight");
+        $("input[name=searchQuery]").removeClass("shiftRight");
+
         $("#bodyMaskElement").css({
             "display": "block"
         });
@@ -189,7 +204,7 @@
         if (!o) {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/camera.png\">");
         } else {
-            $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:4px;\">");
+            $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:10px;\">");
         }
     };
     var processSelectedImage = function(e, t, r) {
@@ -214,14 +229,30 @@
         analyzeImage(e, r)
     };
 
-    $("div.menu").css("flex-basis", "60%");
+    var injectCSS = function() {
+        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
+        ".searchBarDivider.shiftRight{left:120px;}\n" + 
+        ".searchField{padding-left:55px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
+        ".searchField.shiftRight{padding-left:110px !important;}\n";
+        var stl = document.createElement("style");
+        stl.type = "text/css";
+        if (stl.styleSheet) {
+            stl.styleSheet.cssText = theCSS;
+        } else {
+            stl.appendChild(document.createTextNode(theCSS));
+        }
+        document.getElementsByTagName("head")[0].appendChild(stl);
+    };
+    injectCSS();
+
+    $("div.menu").css("flex-basis", "65%");
     new Image().src = "https://image-based-search.github.io/images/loading_spinner.gif";
 
     var frag = document.createDocumentFragment();
     var searchForm = $("[name=searchQuery]").parents("form:eq(0)")[0];
     searchForm.style.zIndex = 2;
 
-    $("[name=searchQuery]").css("padding-left", "110px");
+    $("[name=searchQuery]")[0].className = "searchField";
 
     var fileInputField = document.createElement("input");
     fileInputField.type = "file";
@@ -243,12 +274,11 @@
     frag.appendChild(imgSearchBtn);
 
     var divider = document.createElement("div");
+    divider.id = "searchBarDivider";
     divider.style.borderRight = "1px solid #000";
     divider.style.height = "30px";
-    divider.style.position = "absolute";
-    divider.style.left = "120px";
-    divider.style.top = "25px";
     divider.style.zIndex = 5;
+    divider.className = "searchBarDivider";
     frag.appendChild(divider);
 
     searchForm.parentNode.appendChild(frag);
