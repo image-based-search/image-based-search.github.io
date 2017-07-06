@@ -149,6 +149,11 @@
                     });
                     showProcessing(false);
                 }
+            }else if(xmlhttp.readyState === 4 && xmlhttp.status === 200){
+            	$("#bodyMaskElement").css({
+                    "display": "none"
+                });
+            	showProcessing(false);
             }
         }
 
@@ -214,7 +219,7 @@
         analyzeImage(e, r)
     };
 
-    $("div.menu").css("flex-basis", "60%");
+    $("div.menu").css("flex-basis", "65%");
     new Image().src = "https://image-based-search.github.io/images/loading_spinner.gif";
 
     var frag = document.createDocumentFragment();
