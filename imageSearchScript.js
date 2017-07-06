@@ -56,8 +56,10 @@
                     thumbnail.style.top = "26px";
                     thumbnail.style.zIndex = 5;
                     thumbnail.style.borderRadius = "7px";
-                    $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
                     thumbnail.title = "Make: " + make + ", Model:" + model + ", Color: " + color;
+                    setTimeout(function() {
+                        $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
+                    }, 1000);
 
                     if (!$("input[type=checkbox][name=make]")[0]) {
                         $("[name=searchQuery]").val(make + " " + model + " " + color);
@@ -228,8 +230,7 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + 
-        ".searchBarDivider{position:absolute;left:60px;top:25px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
+        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
         ".searchBarDivider.shiftRight{left:120px;}\n" + 
         ".searchField{padding-left:55px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
         ".searchField.shiftRight{padding-left:110px !important;}\n";
