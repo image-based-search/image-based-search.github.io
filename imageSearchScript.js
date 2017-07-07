@@ -85,7 +85,7 @@
                     preview.style.width = "340px";
                     preview.style.maxWidth = "340px";
                     preview.style.maxHeight = "220px";
-                    preview.style.position = "absolute";
+                    preview.style.position = "fixed";
                     preview.style.zIndex = 22;
 
                     setTimeout(function() {
@@ -95,7 +95,7 @@
                                 var previewbox = document.createElement("img");
                                 previewbox.id = "is_previewbox";
                                 previewbox.src = "https://image-based-search.github.io/images/previewbox.png";
-                                previewbox.style.position = "absolute";
+                                previewbox.style.position = "fixed";
                                 previewbox.style.zIndex = 20;
                                 document.getElementsByTagName("body")[0].appendChild(previewbox);
                             }
