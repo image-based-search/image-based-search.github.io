@@ -33,27 +33,10 @@
                 var obj = JSON.parse(result);
                 try {
                     var vehicleFound = false;
-                    var makes = [];
-                    var models = [];
-                    var colors = [];
-                    var thumbnailTitle = "";
-                    var searchQuery = "";
-                    for (var i = 0; i < obj.objects.length; i++) {
-                        var v_make = obj.objects[i].vehicleAnnotation.attributes.system.make.name;
-                        var v_model = obj.objects[i].vehicleAnnotation.attributes.system.model.name;
-                        var v_color = obj.objects[i].vehicleAnnotation.attributes.system.color.name;
-                        if (v_make) {
-                            makes.push(v_make);
-                            models.push(v_model);
-                            colors.push(v_color);
-                            thumbnailTitle += "Make: " + v_make + ", Model:" + v_model + ", Color: " + v_color;
-                            if (i < obj.objects.length - 1) {
-                                thumbnailTitle += " / ";
-                            }
-                            searchQuery += v_make + " " + v_model + " " + v_color + " ";
-                        }
-                    }
-                    if (!makes.length) {
+                    var make = obj.objects[0].vehicleAnnotation.attributes.system.make.name;
+                    var model = obj.objects[0].vehicleAnnotation.attributes.system.model.name;
+                    var color = obj.objects[0].vehicleAnnotation.attributes.system.color.name;
+                    if (!make) {
                         showProcessing(false);
                         $("#bodyMaskElement").css({
                             "display": "none"
@@ -73,13 +56,13 @@
                     thumbnail.style.top = "26px";
                     thumbnail.style.zIndex = 5;
                     thumbnail.style.borderRadius = "7px";
-                    thumbnail.title = thumbnailTitle;
+                    thumbnail.title = "Make: " + make + ", Model:" + model + ", Color: " + color;
                     setTimeout(function() {
                         $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
                     }, 1000);
 
                     if (!$("input[type=checkbox][name=make]")[0]) {
-                        $("[name=searchQuery]").val(searchQuery);
+                        $("[name=searchQuery]").val(make + " " + model + " " + color);
                         $("[name=searchQuery]").parents("form:eq(0)").submit();
                         return;
                     }
@@ -89,23 +72,12 @@
                         $(this).attr("syncstate", "loaded");
                     });
 
-                    for (var i = 0; i < makes.length; i++) {
-                        var lastMake = false;
-                        if (i === makes.length - 1) {
-                            lastMake = true;
+                    $("input[type=checkbox][name=make]").each(function() {
+                        if ($(this).val().toLowerCase().indexOf(make.toLowerCase()) !== -1) {
+                            $(this).trigger("click");
+                            vehicleFound = true;
                         }
-                        $("input[type=checkbox][name=make]").each(function() {
-                            if ($(this).val().toLowerCase().indexOf(makes[i].toLowerCase()) !== -1) {
-                                vehicleFound = true;
-                                if (!lastMake) {
-                                    $(this)[0].checked = true;
-                                } else {
-                                    $(this)[0].checked = false;
-                                    $(this).trigger("click");
-                                }
-                            }
-                        });
-                    }
+                    });
                     if (vehicleFound) {
                         checkBusyStatus(function() {
                             var checkModelEntries = function() {
@@ -121,23 +93,12 @@
                                         $(this).attr("syncstate", "loaded");
                                     });
 
-                                    for (var i = 0; i < models.length; i++) {
-                                        var lastModel = false;
-                                        if (i === models.length - 1) {
-                                            lastModel = true;
+                                    $("input[type=checkbox][name=model]").each(function() {
+                                        if ($(this).val().toLowerCase().indexOf(model.toLowerCase()) !== -1) {
+                                            $(this).trigger("click");
+                                            modelFound = true;
                                         }
-                                        $("input[type=checkbox][name=model]").each(function() {
-                                            if ($(this).val().toLowerCase().indexOf(models[i].toLowerCase()) !== -1) {
-                                                modelFound = true;
-                                                if (!lastModel) {
-                                                    $(this)[0].checked = true;
-                                                } else {
-                                                    $(this)[0].checked = false;
-                                                    $(this).trigger("click");
-                                                }
-                                            }
-                                        });
-                                    }
+                                    });
 
                                     if (modelFound) {
                                         checkBusyStatus(function() {
@@ -148,23 +109,12 @@
                                                     }, 50);
                                                 } else {
                                                     var colorFound = false;
-                                                    for (var i = 0; i < colors.length; i++) {
-                                                        var lastColor = false;
-                                                        if (i === models.length - 1) {
-                                                            lastColor = true;
+                                                    $("input[type=checkbox][name=bodyColor]").each(function() {
+                                                        if ($(this).val().toLowerCase().indexOf(color.toLowerCase()) !== -1) {
+                                                            $(this).trigger("click");
+                                                            colorFound = true;
                                                         }
-                                                        $("input[type=checkbox][name=bodyColor]").each(function() {
-                                                            if ($(this).val().toLowerCase().indexOf(colors[i].toLowerCase()) !== -1) {
-                                                                colorFound = true;
-                                                                if (!lastColor) {
-                                                                    $(this)[0].checked = true;
-                                                                } else {
-                                                                    $(this)[0].checked = false;
-                                                                    $(this).trigger("click");
-                                                                }
-                                                            }
-                                                        });
-                                                    }
+                                                    });
                                                     if (colorFound) {
                                                         checkBusyStatus(function() {
                                                             $("#bodyMaskElement").css({
@@ -280,10 +230,7 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
-        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
-        ".searchField{padding-left:55px !important;}\n" + 
-        ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n";
+        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + ".searchField{padding-left:55px !important;}\n" + ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n";
         var stl = document.createElement("style");
         stl.type = "text/css";
         if (stl.styleSheet) {
