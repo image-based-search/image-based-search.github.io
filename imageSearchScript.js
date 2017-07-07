@@ -163,7 +163,7 @@
             }
         }
 
-        xmlhttp.open("POST", "https://dev.sighthoundapi.com/v1/recognition?objectType=vehicle,licenseplate");
+        xmlhttp.open("POST", "https://dev.sighthoundapi.com/v1/recognition?objectType=vehicle");
         xmlhttp.setRequestHeader("Content-type", "application/octet-stream");
         xmlhttp.setRequestHeader("X-Access-Token", "ZO0PdOzYeXQlsxtf4G3FhL9hoof5GuFP3Oz7");
         xmlhttp.send(image);
@@ -230,10 +230,10 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
-        ".searchBarDivider.shiftRight{left:120px;}\n" + 
-        ".searchField{padding-left:55px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
-        ".searchField.shiftRight{padding-left:110px !important;}\n";
+        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
+        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
+        ".searchField{padding-left:55px !important;}\n" + 
+        ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n";
         var stl = document.createElement("style");
         stl.type = "text/css";
         if (stl.styleSheet) {
@@ -258,6 +258,7 @@
     fileInputField.type = "file";
     fileInputField.name = "fileinputfield";
     fileInputField.id = "fileinputfield";
+    fileInputField.setAttribute("accept","image/*");
     fileInputField.style.display = "none";
     frag.appendChild(fileInputField);
 
