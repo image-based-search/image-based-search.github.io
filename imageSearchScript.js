@@ -3,7 +3,7 @@
         return;
     }
 
-    var checkBusyStatus = function(cb) {
+    var checkBusyStatus = function(cb){
         $("form[name=vehicleFilter]").attr("syncstate", "waiting");
         var _chk = function(cb) {
             document.documentElement.scrollTop = 0;
