@@ -73,9 +73,46 @@
                     thumbnail.style.top = "26px";
                     thumbnail.style.zIndex = 5;
                     thumbnail.style.borderRadius = "7px";
-                    thumbnail.title = thumbnailTitle;
+                    /*thumbnail.title = thumbnailTitle;*/
+
+                    if ($("#preview_car_image")[0]) {
+                        $("#preview_car_image")[0].parentNode.removeChild($("#preview_car_image")[0]);
+                    }
+
+                    var preview = document.createElement("img");
+                    preview.src = e;
+                    preview.id = "preview_car_image";
+                    preview.style.width = "340px";
+                    preview.style.maxWidth = "340px";
+                    preview.style.maxHeight = "220px";
+                    preview.style.position = "absolute";
+                    preview.style.zIndex = 22;
+
                     setTimeout(function() {
                         $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
+                        $("#thumbnailImage").on("mouseover", function(e) {
+                            if (!$("#is_previewbox")[0]) {
+                                var previewbox = document.createElement("img");
+                                previewbox.id = "is_previewbox";
+                                previewbox.src = "https://image-based-search.github.io/images/previewbox.png";
+                                previewbox.style.position = "absolute";
+                                previewbox.style.zIndex = 20;
+                                document.getElementsByTagName("body")[0].appendChild(previewbox);
+                            }
+                            var pos = $("input[name=searchQuery]")[0].getBoundingClientRect();
+                            $("#is_previewbox")[0].style.top = (pos.top + 35) + "px";
+                            $("#is_previewbox")[0].style.left = (pos.left + 133 - 400) + "px";
+                            $("#is_previewbox")[0].style.display = "block";
+
+                            document.getElementsByTagName("body")[0].appendChild(preview);
+                            $("#preview_car_image")[0].style.top = (pos.top + 76) + "px";
+                            $("#preview_car_image")[0].style.left = (pos.left + 160 - 400) + "px";
+                            $("#preview_car_image")[0].style.display = "block";
+                        });
+                        $("#thumbnailImage").on("mouseout", function(e) {
+                            $("#preview_car_image")[0] && ($("#preview_car_image")[0].style.display = "none");
+                            $("#is_previewbox")[0] && ($("#is_previewbox")[0].style.display = "none");
+                        });
                     }, 1000);
 
                     if (!$("input[type=checkbox][name=make]")[0]) {
@@ -297,6 +334,7 @@
 
     $("div.menu").css("flex-basis", "65%");
     new Image().src = "https://image-based-search.github.io/images/loading_spinner.gif";
+    new Image().src = "https://image-based-search.github.io/images/previewbox.png";
 
     var frag = document.createDocumentFragment();
     var searchForm = $("[name=searchQuery]").parents("form:eq(0)")[0];
@@ -332,6 +370,7 @@
     divider.className = "searchBarDivider";
     frag.appendChild(divider);
 
+    searchForm.parentNode.style.maxHeight = "80px";
     searchForm.parentNode.appendChild(frag);
 
     $("#imgSearchBtn").on("click", function(e) {
