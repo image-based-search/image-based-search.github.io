@@ -306,6 +306,6 @@
 
 bookmarklet code:
 
-javascript:(function(){var scr=document.createElement("script");scr.src="https://image-based-search.github.io/imageSearchScript.js";document.getElementsByTagName("head")[0].appendChild(scr);}());
+javascript:(function(){var scr=document.createElement("script");scr.src="https://image-based-search.github.io/single_imageSearchScript.js";document.getElementsByTagName("head")[0].appendChild(scr);}());
 
 */
