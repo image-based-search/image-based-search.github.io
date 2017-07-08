@@ -23,6 +23,12 @@
         _chk(cb);
     };
 
+    var createLowerCaseValues = function() {
+        $("input[type=checkbox][name=make],input[type=checkbox][name=model],input[type=checkbox][name=bodyColor]").each(function() {
+            $(this).attr("data-lcaseval", $(this).val().toLowerCase());
+        });
+    };
+
     var analyzeImage = function(e, r) {
         var image = r;
         var xmlhttp = new XMLHttpRequest();
@@ -138,119 +144,147 @@
                         return;
                     }
 
-                    $("input[type=checkbox][name=make],input[type=checkbox][name=model],input[type=checkbox][name=bodyColor]").each(function() {
-                        $(this)[0].checked = false;
-                        $(this).attr("syncstate", "loaded");
-                    });
-
-                    for (var i = 0; i < makes.length; i++) {
-                        var lastMake = false;
-                        if (i === makes.length - 1) {
-                            lastMake = true;
+                    $("input[type=checkbox]").each(function() {
+                        if ($(this).attr("name") !== "make") {
+                            $(this)[0].checked = false;
+                            $(this).attr("syncstate", "loaded");
                         }
-                        $("input[type=checkbox][name=make]").each(function() {
-                            if ($(this).val().toLowerCase().indexOf(makes[i].toLowerCase()) !== -1) {
-                                vehicleFound = true;
-                                if (!lastMake) {
-                                    $(this)[0].checked = true;
-                                } else {
-                                    $(this)[0].checked = false;
-                                    $(this).trigger("click");
-                                }
+                    });
+                    var alreadyCheckedMakesLength = $("input[type=checkbox][name=make]:checked").length;
+                    var alreadyCheckedMakesCtr = 0;
+                    $("input[type=checkbox][name=make]:checked").each(function() {
+                        if (alreadyCheckedMakesCtr < alreadyCheckedMakesLength - 1) {
+                            $(this)[0].checked = false;
+                        } else {
+                            $(this).trigger("click");
+                        }
+                        alreadyCheckedMakesCtr++;
+                    });
+                    var startProcessingData = function() {
+                        createLowerCaseValues();
+                        var matchedMakes = [];
+                        for (var i = 0; i < makes.length; i++) {
+                            if ($("input[type=checkbox][name=make][data-lcaseval*=\"" + makes[i].toLowerCase() + "\"]")[0]) {
+                                matchedMakes.push(makes[i]);
                             }
-                        });
-                    }
-                    if (vehicleFound) {
-                        checkBusyStatus(function() {
-                            var checkModelEntries = function() {
-                                if (!$("input[type=checkbox][name=model]")[0] || $($("input[type=checkbox][name=model]")[0]).attr("syncstate") === "loaded") {
-                                    setTimeout(function() {
-                                        checkModelEntries();
-                                    }, 50);
-                                } else {
-                                    var modelFound = false;
+                        }
+                        for (var i = 0; i < matchedMakes.length; i++) {
+                            var lastMake = false;
 
-                                    $("input[type=checkbox][name=bodyColor]").each(function() {
-                                        $(this)[0].checked = false;
-                                        $(this).attr("syncstate", "loaded");
-                                    });
-
-                                    for (var i = 0; i < models.length; i++) {
-                                        var lastModel = false;
-                                        if (i === models.length - 1) {
-                                            lastModel = true;
-                                        }
-                                        $("input[type=checkbox][name=model]").each(function() {
-                                            if ($(this).val().toLowerCase().indexOf(models[i].toLowerCase()) !== -1) {
-                                                modelFound = true;
-                                                if (!lastModel) {
-                                                    $(this)[0].checked = true;
-                                                } else {
-                                                    $(this)[0].checked = false;
-                                                    $(this).trigger("click");
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    if (modelFound) {
-                                        checkBusyStatus(function() {
-                                            var checkColorEntries = function() {
-                                                if (!$("input[type=checkbox][name=bodyColor]")[0] || $($("input[type=checkbox][name=bodyColor]")[0]).attr("syncstate") === "loaded") {
-                                                    setTimeout(function() {
-                                                        checkColorEntries();
-                                                    }, 50);
-                                                } else {
-                                                    var colorFound = false;
-                                                    for (var i = 0; i < colors.length; i++) {
-                                                        var lastColor = false;
-                                                        if (i === models.length - 1) {
-                                                            lastColor = true;
-                                                        }
-                                                        $("input[type=checkbox][name=bodyColor]").each(function() {
-                                                            if ($(this).val().toLowerCase().indexOf(colors[i].toLowerCase()) !== -1) {
-                                                                colorFound = true;
-                                                                if (!lastColor) {
-                                                                    $(this)[0].checked = true;
-                                                                } else {
-                                                                    $(this)[0].checked = false;
-                                                                    $(this).trigger("click");
-                                                                }
-                                                            }
-                                                        });
-                                                    }
-                                                    if (colorFound) {
-                                                        checkBusyStatus(function() {
-                                                            $("#bodyMaskElement").css({
-                                                                "display": "none"
-                                                            });
-                                                            showProcessing(false);
-                                                        });
-                                                    } else {
-                                                        $("#bodyMaskElement").css({
-                                                            "display": "none"
-                                                        });
-                                                        showProcessing(false);
-                                                    }
-                                                }
-                                            };
-                                            checkColorEntries();
-                                        });
+                            if (i === matchedMakes.length - 1) {
+                                lastMake = true;
+                            }
+                            $("input[type=checkbox][name=make]").each(function() {
+                                if ($(this).val().toLowerCase().indexOf(matchedMakes[i].toLowerCase()) !== -1) {
+                                    vehicleFound = true;
+                                    if (!lastMake) {
+                                        $(this)[0].checked = true;
                                     } else {
-                                        $("#bodyMaskElement").css({
-                                            "display": "none"
-                                        });
-                                        showProcessing(false);
+                                        $(this)[0].checked = false;
+                                        $(this).trigger("click");
                                     }
                                 }
-                            };
-                            checkModelEntries();
-                        });
+                            });
+                        }
+                        if (vehicleFound) {
+                            checkBusyStatus(function() {
+                                createLowerCaseValues();
+                                var modelFound = false;
+
+                                $("input[type=checkbox][name=bodyColor]").each(function() {
+                                    $(this)[0].checked = false;
+                                    $(this).attr("syncstate", "loaded");
+                                });
+
+                                var matchedModels = [];
+
+                                for (var i = 0; i < models.length; i++) {
+                                    if ($("input[type=checkbox][name=model][data-lcaseval*=\"" + models[i].toLowerCase() + "\"]")[0]) {
+                                        matchedModels.push(models[i]);
+                                    }
+                                }
+
+                                for (var i = 0; i < matchedModels.length; i++) {
+                                    var lastModel = false;
+                                    if (i === matchedModels.length - 1) {
+                                        lastModel = true;
+                                    }
+                                    $("input[type=checkbox][name=model]").each(function() {
+                                        if ($(this).val().toLowerCase().indexOf(matchedModels[i].toLowerCase()) !== -1) {
+                                            modelFound = true;
+                                            if (!lastModel) {
+                                                $(this)[0].checked = true;
+                                            } else {
+                                                $(this)[0].checked = false;
+                                                $(this).trigger("click");
+                                            }
+                                        }
+                                    });
+                                }
+
+                                if (modelFound) {
+                                    checkBusyStatus(function() {
+                                        createLowerCaseValues();
+                                        var colorFound = false;
+                                        var matchedColors = [];
+
+                                        for (var i = 0; i < colors.length; i++) {
+                                            if ($("input[type=checkbox][name=bodyColor][data-lcaseval*=\"" + colors[i].toLowerCase() + "\"]")[0]) {
+                                                matchedColors.push(colors[i]);
+                                            }
+                                        }
+
+                                        for (var i = 0; i < matchedColors.length; i++) {
+                                            var lastColor = false;
+                                            if (i === matchedColors.length - 1) {
+                                                lastColor = true;
+                                            }
+                                            $("input[type=checkbox][name=bodyColor]").each(function() {
+                                                if ($(this).val().toLowerCase().indexOf(matchedColors[i].toLowerCase()) !== -1) {
+                                                    colorFound = true;
+                                                    if (!lastColor) {
+                                                        $(this)[0].checked = true;
+                                                    } else {
+                                                        $(this)[0].checked = false;
+                                                        $(this).trigger("click");
+                                                    }
+                                                }
+                                            });
+                                        }
+                                        if (colorFound) {
+                                            checkBusyStatus(function() {
+                                                $("#bodyMaskElement").css({
+                                                    "display": "none"
+                                                });
+                                                showProcessing(false);
+                                            });
+                                        } else {
+                                            $("#bodyMaskElement").css({
+                                                "display": "none"
+                                            });
+                                            showProcessing(false);
+                                        }
+                                    });
+                                } else {
+                                    $("#bodyMaskElement").css({
+                                        "display": "none"
+                                    });
+                                    showProcessing(false);
+                                }
+                            });
+                        } else {
+                            $("#bodyMaskElement").css({
+                                "display": "none"
+                            });
+                            showProcessing(false);
+                        }
+                    };
+                    if (alreadyCheckedMakesLength === 0) {
+                        startProcessingData();
                     } else {
-                        $("#bodyMaskElement").css({
-                            "display": "none"
+                        checkBusyStatus(function() {
+                            startProcessingData();
                         });
-                        showProcessing(false);
                     }
                 } catch (exjs) {
                     /*handle failure here*/
@@ -258,6 +292,7 @@
                         "display": "none"
                     });
                     showProcessing(false);
+                    window.console && console.log && console.log(exjs);
                 }
             } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
                 $("#bodyMaskElement").css({
@@ -334,14 +369,7 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
-        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
-        ".searchField{padding-left:55px !important;}\n" + 
-        ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
-        ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + 
-        "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + 
-        "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + 
-        "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
+        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + ".searchField{padding-left:55px !important;}\n" + ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
         var stl = document.createElement("style");
         stl.type = "text/css";
         if (stl.styleSheet) {
