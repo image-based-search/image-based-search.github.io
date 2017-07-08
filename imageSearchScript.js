@@ -144,10 +144,9 @@
                         return;
                     }
 
-                    $("input[type=checkbox]").each(function() {
+                    $("form[name=vehicleFilter] input[type=checkbox]:checked").each(function() {
                         if ($(this).attr("name") !== "make") {
                             $(this)[0].checked = false;
-                            $(this).attr("syncstate", "loaded");
                         }
                     });
                     var alreadyCheckedMakesLength = $("input[type=checkbox][name=make]:checked").length;
@@ -174,15 +173,13 @@
                             if (i === matchedMakes.length - 1) {
                                 lastMake = true;
                             }
-                            $("input[type=checkbox][name=make]").each(function() {
-                                if ($(this).val().toLowerCase().indexOf(matchedMakes[i].toLowerCase()) !== -1) {
-                                    vehicleFound = true;
-                                    if (!lastMake) {
-                                        $(this)[0].checked = true;
-                                    } else {
-                                        $(this)[0].checked = false;
-                                        $(this).trigger("click");
-                                    }
+                            $("input[type=checkbox][name=make][data-lcaseval*=\"" + matchedMakes[i].toLowerCase() + "\"]").each(function() {
+                                vehicleFound = true;
+                                if (!lastMake) {
+                                    $(this)[0].checked = true;
+                                } else {
+                                    $(this)[0].checked = false;
+                                    $(this).trigger("click");
                                 }
                             });
                         }
@@ -191,9 +188,8 @@
                                 createLowerCaseValues();
                                 var modelFound = false;
 
-                                $("input[type=checkbox][name=bodyColor]").each(function() {
+                                $("input[type=checkbox][name=bodyColor]:checked").each(function() {
                                     $(this)[0].checked = false;
-                                    $(this).attr("syncstate", "loaded");
                                 });
 
                                 var matchedModels = [];
@@ -209,19 +205,16 @@
                                     if (i === matchedModels.length - 1) {
                                         lastModel = true;
                                     }
-                                    $("input[type=checkbox][name=model]").each(function() {
-                                        if ($(this).val().toLowerCase().indexOf(matchedModels[i].toLowerCase()) !== -1) {
-                                            modelFound = true;
-                                            if (!lastModel) {
-                                                $(this)[0].checked = true;
-                                            } else {
-                                                $(this)[0].checked = false;
-                                                $(this).trigger("click");
-                                            }
+                                    $("input[type=checkbox][name=model][data-lcaseval*=\"" + matchedModels[i].toLowerCase() + "\"]").each(function() {
+                                        modelFound = true;
+                                        if (!lastModel) {
+                                            $(this)[0].checked = true;
+                                        } else {
+                                            $(this)[0].checked = false;
+                                            $(this).trigger("click");
                                         }
                                     });
                                 }
-
                                 if (modelFound) {
                                     checkBusyStatus(function() {
                                         createLowerCaseValues();
@@ -239,15 +232,13 @@
                                             if (i === matchedColors.length - 1) {
                                                 lastColor = true;
                                             }
-                                            $("input[type=checkbox][name=bodyColor]").each(function() {
-                                                if ($(this).val().toLowerCase().indexOf(matchedColors[i].toLowerCase()) !== -1) {
-                                                    colorFound = true;
-                                                    if (!lastColor) {
-                                                        $(this)[0].checked = true;
-                                                    } else {
-                                                        $(this)[0].checked = false;
-                                                        $(this).trigger("click");
-                                                    }
+                                            $("input[type=checkbox][name=bodyColor][data-lcaseval*=\"" + matchedColors[i].toLowerCase() + "\"]").each(function() {
+                                                colorFound = true;
+                                                if (!lastColor) {
+                                                    $(this)[0].checked = true;
+                                                } else {
+                                                    $(this)[0].checked = false;
+                                                    $(this).trigger("click");
                                                 }
                                             });
                                         }
