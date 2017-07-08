@@ -369,7 +369,15 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + ".searchField{padding-left:55px !important;}\n" + ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
+        var theCSS = "" + 
+        ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
+        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
+        ".searchField{padding-left:55px !important;}\n" + 
+        ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
+        ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + 
+        "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + 
+        "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + 
+        "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
         var stl = document.createElement("style");
         stl.type = "text/css";
         if (stl.styleSheet) {
