@@ -144,10 +144,9 @@
                         return;
                     }
 
-                    $("input[type=checkbox]").each(function() {
+                    $("form[name=vehicleFilter] input[type=checkbox]:checked").each(function() {
                         if ($(this).attr("name") !== "make") {
                             $(this)[0].checked = false;
-                            $(this).attr("syncstate", "loaded");
                         }
                     });
                     var alreadyCheckedMakesLength = $("input[type=checkbox][name=make]:checked").length;
@@ -174,15 +173,13 @@
                             if (i === matchedMakes.length - 1) {
                                 lastMake = true;
                             }
-                            $("input[type=checkbox][name=make]").each(function() {
-                                if ($(this).val().toLowerCase().indexOf(matchedMakes[i].toLowerCase()) !== -1) {
-                                    vehicleFound = true;
-                                    if (!lastMake) {
-                                        $(this)[0].checked = true;
-                                    } else {
-                                        $(this)[0].checked = false;
-                                        $(this).trigger("click");
-                                    }
+                            $("input[type=checkbox][name=make][data-lcaseval*=\"" + matchedMakes[i].toLowerCase() + "\"]").each(function() {
+                                vehicleFound = true;
+                                if (!lastMake) {
+                                    $(this)[0].checked = true;
+                                } else {
+                                    $(this)[0].checked = false;
+                                    $(this).trigger("click");
                                 }
                             });
                         }
@@ -191,9 +188,8 @@
                                 createLowerCaseValues();
                                 var modelFound = false;
 
-                                $("input[type=checkbox][name=bodyColor]").each(function() {
+                                $("input[type=checkbox][name=bodyColor]:checked").each(function() {
                                     $(this)[0].checked = false;
-                                    $(this).attr("syncstate", "loaded");
                                 });
 
                                 var matchedModels = [];
@@ -209,19 +205,16 @@
                                     if (i === matchedModels.length - 1) {
                                         lastModel = true;
                                     }
-                                    $("input[type=checkbox][name=model]").each(function() {
-                                        if ($(this).val().toLowerCase().indexOf(matchedModels[i].toLowerCase()) !== -1) {
-                                            modelFound = true;
-                                            if (!lastModel) {
-                                                $(this)[0].checked = true;
-                                            } else {
-                                                $(this)[0].checked = false;
-                                                $(this).trigger("click");
-                                            }
+                                    $("input[type=checkbox][name=model][data-lcaseval*=\"" + matchedModels[i].toLowerCase() + "\"]").each(function() {
+                                        modelFound = true;
+                                        if (!lastModel) {
+                                            $(this)[0].checked = true;
+                                        } else {
+                                            $(this)[0].checked = false;
+                                            $(this).trigger("click");
                                         }
                                     });
                                 }
-
                                 if (modelFound) {
                                     checkBusyStatus(function() {
                                         createLowerCaseValues();
@@ -239,15 +232,13 @@
                                             if (i === matchedColors.length - 1) {
                                                 lastColor = true;
                                             }
-                                            $("input[type=checkbox][name=bodyColor]").each(function() {
-                                                if ($(this).val().toLowerCase().indexOf(matchedColors[i].toLowerCase()) !== -1) {
-                                                    colorFound = true;
-                                                    if (!lastColor) {
-                                                        $(this)[0].checked = true;
-                                                    } else {
-                                                        $(this)[0].checked = false;
-                                                        $(this).trigger("click");
-                                                    }
+                                            $("input[type=checkbox][name=bodyColor][data-lcaseval*=\"" + matchedColors[i].toLowerCase() + "\"]").each(function() {
+                                                colorFound = true;
+                                                if (!lastColor) {
+                                                    $(this)[0].checked = true;
+                                                } else {
+                                                    $(this)[0].checked = false;
+                                                    $(this).trigger("click");
                                                 }
                                             });
                                         }
@@ -369,7 +360,15 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + ".searchField{padding-left:55px !important;}\n" + ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
+        var theCSS = "" + 
+        ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
+        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
+        ".searchField{padding-left:55px !important;}\n" + 
+        ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
+        ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + 
+        "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + 
+        "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + 
+        "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
         var stl = document.createElement("style");
         stl.type = "text/css";
         if (stl.styleSheet) {
