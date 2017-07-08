@@ -82,35 +82,52 @@
                     var preview = document.createElement("img");
                     preview.src = e;
                     preview.id = "preview_car_image";
-                    preview.style.width = "340px";
-                    preview.style.maxWidth = "340px";
+                    preview.style.maxWidth = "360px";
                     preview.style.maxHeight = "220px";
-                    preview.style.position = "fixed";
-                    preview.style.zIndex = 22;
+                    preview.style.position = "absolute";
+                    preview.style.top = "50%";
+                    preview.style.left = "50%";
+                    preview.style.visibility = "hidden";
 
                     setTimeout(function() {
                         $("#imgSearchBtn")[0].parentNode.insertBefore(thumbnail, $("#imgSearchBtn")[0]);
                         $("#thumbnailImage").on("mouseover", function(e) {
                             if (!$("#is_previewbox")[0]) {
-                                var previewbox = document.createElement("img");
+                                var containerWidth = 426;
+                                var containerHeight = 305;
+
+                                var previewbox = document.createElement("div");
                                 previewbox.id = "is_previewbox";
-                                previewbox.src = "https://image-based-search.github.io/images/previewbox.png";
-                                previewbox.style.position = "fixed";
-                                previewbox.style.zIndex = 20;
+                                previewbox.style.width = containerWidth + "px";
+                                previewbox.style.height = containerHeight + "px";
+
+                                var previewboxbg = document.createElement("img");
+                                previewboxbg.id = "is_previewboxbg";
+                                previewboxbg.src = "https://image-based-search.github.io/images/previewbox.png";
+                                previewboxbg.style.width = containerWidth + "px";
+                                previewboxbg.style.height = containerHeight + "px";
+                                previewbox.appendChild(previewboxbg);
+
+                                var previewboxdiv = document.createElement("div");
+                                previewboxdiv.id = "is_previewboxdiv";
+                                previewbox.appendChild(previewboxdiv);
+
                                 document.getElementsByTagName("body")[0].appendChild(previewbox);
                             }
                             var pos = $("input[name=searchQuery]")[0].getBoundingClientRect();
-                            $("#is_previewbox")[0].style.top = (pos.top + 29) + "px";
+                            $("#is_previewbox")[0].style.top = (pos.top + 37) + "px";
                             $("#is_previewbox")[0].style.left = (pos.left + 128 - 400) + "px";
                             $("#is_previewbox")[0].style.display = "block";
 
-                            document.getElementsByTagName("body")[0].appendChild(preview);
-                            $("#preview_car_image")[0].style.top = (pos.top + 76) + "px";
-                            $("#preview_car_image")[0].style.left = (pos.left + 160 - 400) + "px";
-                            $("#preview_car_image")[0].style.display = "block";
+                            $("#is_previewboxdiv")[0].appendChild(preview);
+
+                            setTimeout(function() {
+                                $("#preview_car_image")[0].style.marginTop = -($("#preview_car_image")[0].offsetHeight / 2) + "px";
+                                $("#preview_car_image")[0].style.marginLeft = -($("#preview_car_image")[0].offsetWidth / 2) + "px";
+                                $("#preview_car_image")[0].style.visibility = "visible";
+                            }, 11);
                         });
                         $("#thumbnailImage").on("mouseout", function(e) {
-                            $("#preview_car_image")[0] && ($("#preview_car_image")[0].style.display = "none");
                             $("#is_previewbox")[0] && ($("#is_previewbox")[0].style.display = "none");
                         });
                     }, 1000);
@@ -317,12 +334,14 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + 
-        ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
+        var theCSS = "" + ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
         ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
         ".searchField{padding-left:55px !important;}\n" + 
         ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
-        ".gg-chatbox, .gg-chat-tab {display:none !important;}\n";
+        ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + 
+        "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + 
+        "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + 
+        "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
         var stl = document.createElement("style");
         stl.type = "text/css";
         if (stl.styleSheet) {
