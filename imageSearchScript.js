@@ -53,10 +53,11 @@
                             models.push(v_model);
                             colors.push(v_color);
                             thumbnailTitle += "Make: " + v_make + ", Model:" + v_model + ", Color: " + v_color;
+                            searchQuery += v_make + " " + v_model + " " + v_color;
                             if (i < obj.objects.length - 1) {
                                 thumbnailTitle += " / ";
+                                searchQuery += " ";
                             }
-                            searchQuery += v_make + " " + v_model + " " + v_color + " ";
                         }
                     }
                     if (!makes.length) {
