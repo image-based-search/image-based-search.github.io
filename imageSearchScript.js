@@ -439,6 +439,8 @@
     $("div.menu").css("flex-basis", "65%");
     new Image().src = "https://image-based-search.github.io/images/loading_spinner.gif";
     new Image().src = "https://image-based-search.github.io/images/previewbox.png";
+    new Image().src = "https://image-based-search.github.io/images/err_processingreq.png";
+    new Image().src = "https://image-based-search.github.io/images/err_novehiclefound.png";
 
     var frag = document.createDocumentFragment();
     var searchForm = $("[name=searchQuery]").parents("form:eq(0)")[0];
