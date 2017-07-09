@@ -29,6 +29,58 @@
         });
     };
 
+    var showErrorMessage = function(errorcode) {
+        var msgSrc = "";
+        var cssConfig;
+        switch (errorcode) {
+        case "err_proc":
+            {
+                msgSrc = "https://image-based-search.github.io/images/err_processingreq.png";
+                var pos = $("input[name=searchQuery]")[0].getBoundingClientRect();
+                cssConfig = {
+                    "z-index": 22,
+                    "position": "fixed"
+                };
+                cssConfig["top"] = (pos.top + 35) + "px";
+                cssConfig["left"] = (pos.left - 227) + "px";
+                break;
+            }
+        case "err_nocar":
+            {
+                msgSrc = "https://image-based-search.github.io/images/err_novehiclefound.png";
+                var pos = $("input[name=searchQuery]")[0].getBoundingClientRect();
+                cssConfig = {
+                    "z-index": 22,
+                    "position": "fixed"
+                };
+                cssConfig["top"] = (pos.top + 35) + "px";
+                cssConfig["left"] = (pos.left - 226) + "px";
+                break;
+            }
+        }
+        if (msgSrc) {
+            var errMsg = document.createElement("img");
+            errMsg.id = "is_error_msg";
+            errMsg.src = msgSrc;
+            if (cssConfig) {
+                for (var s in cssConfig) {
+                    errMsg.style[s] = cssConfig[s];
+                }
+            }
+            document.getElementsByTagName("body")[0].appendChild(errMsg);
+            setTimeout(function() {
+                $("#is_error_msg")[0] && ($("#is_error_msg")[0].parentNode.removeChild($("#is_error_msg")[0]));
+            }, 5000);
+            if (!window.is_resizehandler_attached) {
+                window.onresize = function() {
+                    $("#is_error_msg")[0] && ($("#is_error_msg")[0].parentNode.removeChild($("#is_error_msg")[0]));
+                }
+                ;
+                window.is_resizehandler_attached = "yes";
+            }
+        }
+    };
+
     var analyzeImage = function(e, r) {
         var image = r;
         var xmlhttp = new XMLHttpRequest();
@@ -65,6 +117,7 @@
                         $("#bodyMaskElement").css({
                             "display": "none"
                         });
+                        showErrorMessage("err_nocar");
                         return;
                     }
 
@@ -285,12 +338,14 @@
                     });
                     showProcessing(false);
                     window.console && console.log && console.log(exjs);
+                    showErrorMessage("err_proc");
                 }
             } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
                 $("#bodyMaskElement").css({
                     "display": "none"
                 });
                 showProcessing(false);
+                showErrorMessage("err_proc");
             }
         }
 
