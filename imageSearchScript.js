@@ -29,6 +29,13 @@
         });
     };
 
+    var mobileMenuClick = function() {
+        var mobileMenuElem = document.querySelectorAll("li.mobileMenu")[0];
+        if (mobileMenuElem) {
+            mobileMenuElem.click();
+        }
+    };
+
     var showErrorMessage = function(errorcode) {
         var msgSrc = "";
         var cssConfig;
@@ -127,12 +134,6 @@
                     var thumbnail = document.createElement("img");
                     thumbnail.src = e;
                     thumbnail.id = "thumbnailImage";
-                    thumbnail.style.height = "30px";
-                    thumbnail.style.position = "absolute";
-                    thumbnail.style.left = "58px";
-                    thumbnail.style.top = "26px";
-                    thumbnail.style.zIndex = 5;
-                    thumbnail.style.borderRadius = "7px";
                     /*thumbnail.title = thumbnailTitle;*/
 
                     if ($("#preview_car_image")[0]) {
@@ -302,12 +303,14 @@
                                                     "display": "none"
                                                 });
                                                 showProcessing(false);
+                                                mobileMenuClick();
                                             });
                                         } else {
                                             $("#bodyMaskElement").css({
                                                 "display": "none"
                                             });
                                             showProcessing(false);
+                                            mobileMenuClick();
                                         }
                                     });
                                 } else {
@@ -315,6 +318,7 @@
                                         "display": "none"
                                     });
                                     showProcessing(false);
+                                    mobileMenuClick();
                                 }
                             });
                         } else {
@@ -322,6 +326,7 @@
                                 "display": "none"
                             });
                             showProcessing(false);
+                            mobileMenuClick();
                         }
                     };
                     if (alreadyCheckedMakesLength === 0) {
@@ -417,8 +422,15 @@
 
     var injectCSS = function() {
         var theCSS = "" + 
-        ".searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
-        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}\n" + 
+        "@media (min-width: 801px) {#imgSearchBtn{display:inline-block;position:absolute;top:24px;left:20px;z-index:5;}}\n" + 
+        "@media (max-width: 800px) {#imgSearchBtn{display:none;}\n.cta.open ~ [role='search'] #imgSearchBtn{display:inline-block;position:absolute;top:135px;left:22px;z-index:5;}}\n" + 
+        "@media (min-width: 801px) {.searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
+        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}}\n" + 
+        "@media (max-width: 800px) {.searchBarDivider{display:none;}\n.cta.open ~ [role='search'] .searchBarDivider{display:block;position:absolute;left:60px;top:135px;}\n" + 
+        ".cta.open ~ [role='search'] .searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}}\n" + 
+        "@media (min-width: 801px) {#thumbnailImage{height:30px;position:absolute;left:58px;top:26px;z-index:5;border-radius:7px;}}\n" + 
+        "@media (max-width: 800px) {#thumbnailImage{display:none;}\n.cta.open ~ [role='search'] #thumbnailImage{display:block;height:30px;position:absolute;left:58px;top:135px;z-index:5;border-radius:7px;}}\n" + 
+        "@media (max-width: 800px) {#is_previewbox{display:none !important;}}\n" + 
         ".searchField{padding-left:55px !important;}\n" + 
         ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
         ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + 
@@ -459,13 +471,6 @@
     var imgSearchBtn = document.createElement("div");
     imgSearchBtn.innerHTML = "<img src=\"https://image-based-search.github.io/images/camera.png\">";
     imgSearchBtn.id = "imgSearchBtn";
-    imgSearchBtn.style.display = "inline-block";
-    imgSearchBtn.style.textTransform = "none";
-    imgSearchBtn.style.fontWeight = "bold";
-    imgSearchBtn.style.position = "absolute";
-    imgSearchBtn.style.top = "24px";
-    imgSearchBtn.style.left = "20px";
-    imgSearchBtn.style.zIndex = 5;
     frag.appendChild(imgSearchBtn);
 
     var divider = document.createElement("div");
