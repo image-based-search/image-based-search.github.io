@@ -49,7 +49,7 @@
                     "position": "fixed"
                 };
                 cssConfig["top"] = (pos.top + 35) + "px";
-                cssConfig["left"] = (pos.left - 227) + "px";
+                cssConfig["left"] = (pos.left - 15) + "px";
                 break;
             }
         case "err_nocar":
@@ -61,7 +61,7 @@
                     "position": "fixed"
                 };
                 cssConfig["top"] = (pos.top + 35) + "px";
-                cssConfig["left"] = (pos.left - 226) + "px";
+                cssConfig["left"] = (pos.left - 15) + "px";
                 break;
             }
         }
@@ -421,23 +421,134 @@
     };
 
     var injectCSS = function() {
-        var theCSS = "" + 
-        "@media (min-width: 801px) {#imgSearchBtn{display:inline-block;position:absolute;top:24px;left:20px;z-index:5;}}\n" + 
-        "@media (max-width: 800px) {#imgSearchBtn{display:none;}\n.cta.open ~ [role='search'] #imgSearchBtn{display:inline-block;position:absolute;top:135px;left:22px;z-index:5;}}\n" + 
-        "@media (min-width: 801px) {.searchBarDivider{position:absolute;left:60px;top:25px;}\n" + 
-        ".searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}}\n" + 
-        "@media (max-width: 800px) {.searchBarDivider{display:none;}\n.cta.open ~ [role='search'] .searchBarDivider{display:block;position:absolute;left:60px;top:135px;}\n" + 
-        ".cta.open ~ [role='search'] .searchBarDivider.shiftRight{left:120px;-webkit-transition:left 1s;transition:left 1s;}}\n" + 
-        "@media (min-width: 801px) {#thumbnailImage{height:30px;position:absolute;left:58px;top:26px;z-index:5;border-radius:7px;}}\n" + 
-        "@media (max-width: 800px) {#thumbnailImage{display:none;}\n.cta.open ~ [role='search'] #thumbnailImage{display:block;height:30px;position:absolute;left:58px;top:135px;z-index:5;border-radius:7px;}}\n" + 
-        "@media (max-width: 800px) {#is_previewbox{display:none !important;}}\n" + 
-        ".searchField{padding-left:55px !important;}\n" + 
-        ".searchField.shiftRight{padding-left:110px !important;-webkit-transition:padding-left 1s;transition:padding-left 1s;}\n" + 
-        ".gg-chatbox, .gg-chat-tab {display:none !important;}\n" + 
-        "#is_previewbox{position:fixed;z-index:20;display:none;}\n" + 
-        "#is_previewboxbg{position:absolute;top:0px;left:0px;z-index:22;}\n" + 
-        "#is_previewboxdiv{position:absolute;left:20px;top:33px;width:372px;height:240px;z-index:25}\n";
+        var theCSS = "\n" + 
+        "@media (min-width: 801px) {\n" + 
+        "    #imgSearchBtn {\n" + 
+        "        display:inline-block;\n" + 
+        "        position: absolute;\n" + 
+        "        top: 24px;\n" + 
+        "        left: 20px;\n" + 
+        "        z-index: 5;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        "@media (max-width: 800px) {\n" + 
+        "    #imgSearchBtn {\n" + 
+        "        display:none;\n" + 
+        "    }\n" + 
+        "\n" + 
+        "    .cta.open ~ [role='search'] #imgSearchBtn {\n" + 
+        "        display: inline-block;\n" + 
+        "        position: absolute;\n" + 
+        "        top: 135px;\n" + 
+        "        left: 22px;\n" + 
+        "        z-index: 5;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        "@media (min-width: 801px) {\n" + 
+        "    .searchBarDivider {\n" + 
+        "        position:absolute;\n" + 
+        "        left: 60px;\n" + 
+        "        top: 25px;\n" + 
+        "    }\n" + 
+        "\n" + 
+        "    .searchBarDivider.shiftRight {\n" + 
+        "        left: 120px;\n" + 
+        "        -webkit-transition: left 1s;\n" + 
+        "        transition: left 1s;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        "@media (max-width: 800px) {\n" + 
+        "    .searchBarDivider {\n" + 
+        "        display:none;\n" + 
+        "    }\n" + 
+        "\n" + 
+        "    .cta.open ~ [role='search'] .searchBarDivider {\n" + 
+        "        display: block;\n" + 
+        "        position: absolute;\n" + 
+        "        left: 60px;\n" + 
+        "        top: 135px;\n" + 
+        "    }\n" + 
+        "\n" + 
+        "    .cta.open ~ [role='search'] .searchBarDivider.shiftRight {\n" + 
+        "        left: 120px;\n" + 
+        "        -webkit-transition: left 1s;\n" + 
+        "        transition: left 1s;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        "@media (min-width: 801px) {\n" + 
+        "    #thumbnailImage {\n" + 
+        "        height:30px;\n" + 
+        "        position: absolute;\n" + 
+        "        left: 58px;\n" + 
+        "        top: 26px;\n" + 
+        "        z-index: 5;\n" + 
+        "        border-radius: 7px;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        "@media (max-width: 800px) {\n" + 
+        "    #thumbnailImage {\n" + 
+        "        display:none;\n" + 
+        "    }\n" + 
+        "\n" + 
+        "    .cta.open ~ [role='search'] #thumbnailImage {\n" + 
+        "        display: block;\n" + 
+        "        height: 30px;\n" + 
+        "        position: absolute;\n" + 
+        "        left: 58px;\n" + 
+        "        top: 135px;\n" + 
+        "        z-index: 5;\n" + 
+        "        border-radius: 7px;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        "@media (max-width: 800px) {\n" + 
+        "    #is_previewbox {\n" + 
+        "        display:none !important;\n" + 
+        "    }\n" + 
+        "}\n" + 
+        "\n" + 
+        ".searchField {\n" + 
+        "    padding-left: 55px !important;\n" + 
+        "}\n" + 
+        "\n" + 
+        ".searchField.shiftRight {\n" + 
+        "    padding-left: 110px !important;\n" + 
+        "    -webkit-transition: padding-left 1s;\n" + 
+        "    transition: padding-left 1s;\n" + 
+        "}\n" + 
+        "\n" + 
+        ".gg-chatbox, .gg-chat-tab {\n" + 
+        "    display: none !important;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_previewbox {\n" + 
+        "    position: fixed;\n" + 
+        "    z-index: 20;\n" + 
+        "    display: none;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_previewboxbg {\n" + 
+        "    position: absolute;\n" + 
+        "    top: 0px;\n" + 
+        "    left: 0px;\n" + 
+        "    z-index: 22;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_previewboxdiv {\n" + 
+        "    position: absolute;\n" + 
+        "    left: 20px;\n" + 
+        "    top: 33px;\n" + 
+        "    width: 372px;\n" + 
+        "    height: 240px;\n" + 
+        "    z-index: 25\n" + 
+        "}\n";
         var stl = document.createElement("style");
+        stl.id = "imageSearch_CSS";
         stl.type = "text/css";
         if (stl.styleSheet) {
             stl.styleSheet.cssText = theCSS;
