@@ -414,7 +414,11 @@
         "    }\n" + 
         "}\n" + 
         "\n" + 
-        "@media (max-width: 800px) {\n" + 
+        "@media (max-width: 800px) {\n" +
+        "    .cta.open ~ div[role=search]{\n" +
+        "        outline:none !important;\n" +
+        "    }\n" +
+        "\n" +
         "    #imgSearchBtn {\n" + 
         "        display:none;\n" + 
         "    }\n" + 
