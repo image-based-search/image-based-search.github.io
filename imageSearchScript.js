@@ -6,8 +6,6 @@
     var checkBusyStatus = function(cb) {
         $("form[name=vehicleFilter]").attr("syncstate", "waiting");
         var _chk = function(cb) {
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
             if ($("form[name=vehicleFilter").attr("syncstate") !== "waiting") {
                 if ((typeof cb) === "function") {
                     setTimeout(function() {
@@ -121,9 +119,6 @@
                     }
                     if (!makes.length) {
                         showProcessing(false);
-                        $("#bodyMaskElement").css({
-                            "display": "none"
-                        });
                         showErrorMessage("err_nocar");
                         return;
                     }
@@ -299,32 +294,20 @@
                                         }
                                         if (colorFound) {
                                             checkBusyStatus(function() {
-                                                $("#bodyMaskElement").css({
-                                                    "display": "none"
-                                                });
                                                 showProcessing(false);
                                                 mobileMenuClick();
                                             });
                                         } else {
-                                            $("#bodyMaskElement").css({
-                                                "display": "none"
-                                            });
                                             showProcessing(false);
                                             mobileMenuClick();
                                         }
                                     });
                                 } else {
-                                    $("#bodyMaskElement").css({
-                                        "display": "none"
-                                    });
                                     showProcessing(false);
                                     mobileMenuClick();
                                 }
                             });
                         } else {
-                            $("#bodyMaskElement").css({
-                                "display": "none"
-                            });
                             showProcessing(false);
                             mobileMenuClick();
                         }
@@ -338,17 +321,11 @@
                     }
                 } catch (exjs) {
                     /*handle failure here*/
-                    $("#bodyMaskElement").css({
-                        "display": "none"
-                    });
                     showProcessing(false);
                     window.console && console.log && console.log(exjs);
                     showErrorMessage("err_proc");
                 }
             } else if (xmlhttp.readyState === 4 && xmlhttp.status !== 200) {
-                $("#bodyMaskElement").css({
-                    "display": "none"
-                });
                 showProcessing(false);
                 showErrorMessage("err_proc");
             }
@@ -385,17 +362,22 @@
         $("#searchBarDivider").removeClass("shiftRight");
         $("input[name=searchQuery]").removeClass("shiftRight");
 
-        $("#bodyMaskElement").css({
-            "display": "block"
-        });
         showProcessing(true);
     };
 
     var showProcessing = function(o) {
         if (!o) {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/camera.png\">");
+            $("#bodyMaskElement").css({
+                "display": "none"
+            });
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
         } else {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:10px;\">");
+            $("#bodyMaskElement").css({
+                "display": "block"
+            });
         }
     };
     var processSelectedImage = function(e, t, r) {
