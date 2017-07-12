@@ -6,6 +6,8 @@
     var checkBusyStatus = function(cb) {
         $("form[name=vehicleFilter]").attr("syncstate", "waiting");
         var _chk = function(cb) {
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
             if ($("form[name=vehicleFilter").attr("syncstate") !== "waiting") {
                 if ((typeof cb) === "function") {
                     setTimeout(function() {
@@ -371,8 +373,6 @@
             $("#bodyMaskElement").css({
                 "display": "none"
             });
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
         } else {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:10px;\">");
             $("#bodyMaskElement").css({
