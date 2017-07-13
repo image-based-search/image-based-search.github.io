@@ -7,7 +7,7 @@
         $("form[name=vehicleFilter]").attr("syncstate", "waiting");
         var _chk = function(cb) {
             document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
+            document.getElementsByTagName("body")[0].scrollTop = 0;
             if ($("form[name=vehicleFilter").attr("syncstate") !== "waiting") {
                 if ((typeof cb) === "function") {
                     setTimeout(function() {
@@ -368,16 +368,30 @@
     };
 
     var showProcessing = function(o) {
+        var isDesktop = true;
+        if (document.querySelectorAll("#dimensionDiv")[0].offsetWidth < 801) {
+            isDesktop = false;
+        }
         if (!o) {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/camera.png\">");
             $("#bodyMaskElement").css({
                 "display": "none"
             });
+            if (isDesktop) {
+                document.querySelectorAll("main>[data-params*=\"cardName:VehicleSearchResults\"]")[0].style.display = "flex";
+                document.querySelectorAll("main")[0].style.height = "auto";
+                document.querySelectorAll("main")[0].style.visibility = "visible";
+            }
         } else {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:10px;\">");
             $("#bodyMaskElement").css({
                 "display": "block"
             });
+            if (isDesktop) {
+                document.querySelectorAll("main>[data-params*=\"cardName:VehicleSearchResults\"]")[0].style.display = "none";
+                document.querySelectorAll("main")[0].style.height = "1000px";
+                document.querySelectorAll("main")[0].style.visibility = "hidden";
+            }
         }
     };
     var processSelectedImage = function(e, t, r) {
@@ -414,13 +428,13 @@
         "    }\n" + 
         "}\n" + 
         "\n" + 
-        "@media (max-width: 800px) {\n" +
-        "    .cta.open ~ div[role=search]{\n" +
-        "        outline:none !important;\n" +
-        "    }\n" +
-        "\n" +
+        "@media (max-width: 800px) {\n" + 
+        "    .cta.open ~ div[role=search] {\n" + 
+        "        outline:none !important;\n" + 
+        "    }\n" + 
+        "\n" + 
         "    #imgSearchBtn {\n" + 
-        "        display:none;\n" + 
+        "        display: none;\n" + 
         "    }\n" + 
         "\n" + 
         "    .cta.open ~ [role='search'] #imgSearchBtn {\n" + 
@@ -597,7 +611,14 @@
     bodyMask.style.zIndex = Math.pow(2, 32) - 1;
     bodyMask.style.display = "none";
     bodyMask.id = "bodyMaskElement";
-    document.body.appendChild(bodyMask);
+    document.getElementsByTagName("body")[0].appendChild(bodyMask);
+
+    var dimensionDiv = document.createElement("div");
+    dimensionDiv.id = "dimensionDiv";
+    dimensionDiv.style.top = dimensionDiv.style.right = dimensionDiv.style.bottom = dimensionDiv.style.left = "0px";
+    dimensionDiv.style.visibility = "hidden";
+    dimensionDiv.style.zIndex = -100;
+    document.getElementsByTagName("body")[0].appendChild(dimensionDiv);
 
     window.imageSearchScriptInjected = true;
 }());
