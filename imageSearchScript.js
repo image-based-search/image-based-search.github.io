@@ -378,9 +378,8 @@
                 "display": "none"
             });
             if (isDesktop) {
-                document.querySelectorAll("main>[data-params*=\"cardName:VehicleSearchResults\"]")[0].style.display = "flex";
+                document.querySelectorAll("#searchProcessingWaitStyle")[0].parentNode.removeChild(document.querySelectorAll("#searchProcessingWaitStyle")[0]);
                 document.querySelectorAll("main")[0].style.height = "auto";
-                document.querySelectorAll("main")[0].style.visibility = "visible";
             }
         } else {
             $("#imgSearchBtn").html("<img src=\"https://image-based-search.github.io/images/loading_spinner.gif\" style=\"position:relative;top:8px;left:10px;\">");
@@ -388,9 +387,9 @@
                 "display": "block"
             });
             if (isDesktop) {
-                document.querySelectorAll("main>[data-params*=\"cardName:VehicleSearchResults\"]")[0].style.display = "none";
+                loadCSS("main>[data-params*=\"cardName:VehicleSearchResults\"]>.deck>[data-params*=\"cardName:vehicleFilters\"]{display:none;}", "searchProcessingWaitStyle");
+                document.querySelectorAll("main>[data-params*=\"cardName:VehicleSearchResults\"]>.deck>[data-params*=\"cardName:vehicleFilters\"]")[0].style.display = "none";
                 document.querySelectorAll("main")[0].style.height = "1000px";
-                document.querySelectorAll("main")[0].style.visibility = "hidden";
             }
         }
     };
@@ -415,7 +414,19 @@
         };
         analyzeImage(e, r)
     };
-
+    var loadCSS = function(cssConfig, styleID) {
+        var stl = document.createElement("style");
+        if (styleID) {
+            stl.id = styleID;
+        }
+        stl.type = "text/css";
+        if (stl.styleSheet) {
+            stl.styleSheet.cssText = cssConfig;
+        } else {
+            stl.appendChild(document.createTextNode(cssConfig));
+        }
+        document.getElementsByTagName("head")[0].appendChild(stl);
+    };
     var injectCSS = function() {
         var theCSS = "\n" + 
         "@media (min-width: 801px) {\n" + 
@@ -547,15 +558,7 @@
         "    height: 240px;\n" + 
         "    z-index: 25\n" + 
         "}\n";
-        var stl = document.createElement("style");
-        stl.id = "imageSearch_CSS";
-        stl.type = "text/css";
-        if (stl.styleSheet) {
-            stl.styleSheet.cssText = theCSS;
-        } else {
-            stl.appendChild(document.createTextNode(theCSS));
-        }
-        document.getElementsByTagName("head")[0].appendChild(stl);
+        loadCSS(theCSS, "imageSearch_CSS");
     };
     injectCSS();
 
