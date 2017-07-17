@@ -638,7 +638,7 @@
         "    height: 40px;\n" + 
         "    text-align: center;\n" + 
         "    font-size: 30px;\n" + 
-        "}\n"
+        "}\n";
         loadCSS(theCSS, "imageSearch_CSS");
     };
     injectCSS();
@@ -661,7 +661,9 @@
         uplButton.innerHTML = "Upload Vehicle Picture";
 
         uplButton.onclick = function() {
-            hideSearchOptions();
+            setTimeout(function() {
+                hideSearchOptions();
+            }, 500);
             $("#fileinputfield")[0].click();
         }
         ;
