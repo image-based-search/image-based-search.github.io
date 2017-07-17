@@ -88,8 +88,14 @@
         }
     };
 
-    var analyzeImage = function(e, r) {
+    var analyzeImage = function(e, r, imageurl) {
         var image = r;
+        if (imageurl) {
+            image = {
+                image: imageurl
+            };
+            image = JSON.stringify(image);
+        }
         var xmlhttp = new XMLHttpRequest();
         var result;
         xmlhttp.onreadystatechange = function() {
@@ -129,7 +135,7 @@
                     $("input[name=searchQuery]").addClass("shiftRight");
 
                     var thumbnail = document.createElement("img");
-                    thumbnail.src = e;
+                    thumbnail.src = imageurl || e;
                     thumbnail.id = "thumbnailImage";
                     /*thumbnail.title = thumbnailTitle;*/
 
@@ -138,7 +144,7 @@
                     }
 
                     var preview = document.createElement("img");
-                    preview.src = e;
+                    preview.src = imageurl || e;
                     preview.id = "preview_car_image";
                     preview.style.maxWidth = "360px";
                     preview.style.maxHeight = "220px";
@@ -334,8 +340,12 @@
         }
 
         xmlhttp.open("POST", "https://dev.sighthoundapi.com/v1/recognition?objectType=vehicle");
-        xmlhttp.setRequestHeader("Content-type", "application/octet-stream");
         xmlhttp.setRequestHeader("X-Access-Token", "ZO0PdOzYeXQlsxtf4G3FhL9hoof5GuFP3Oz7");
+        if (!imageurl) {
+            xmlhttp.setRequestHeader("Content-type", "application/octet-stream");
+        } else {
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+        }
         xmlhttp.send(image);
     };
 
@@ -557,10 +567,154 @@
         "    width: 372px;\n" + 
         "    height: 240px;\n" + 
         "    z-index: 25\n" + 
-        "}\n";
+        "}\n" + 
+        "\n" + 
+        "#is_optionsUI {\n" + 
+        "    position: fixed;\n" + 
+        "    left: 50%;\n" + 
+        "    top: 50%;\n" + 
+        "    background-color: rgb(255, 255, 255);\n" + 
+        "    width: 600px;\n" + 
+        "    height: 70px;\n" + 
+        "    margin-left: -300px;\n" + 
+        "    margin-top: -35px;\n" + 
+        "    border-radius: 11px;\n" + 
+        "    z-index: 536870911;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_uplBtn {\n" + 
+        "    cursor: pointer;\n" + 
+        "    width: 200px;\n" + 
+        "    height: 40px;\n" + 
+        "    background-color: rgb(0, 0, 0);\n" + 
+        "    color: rgb(255, 255, 255);\n" + 
+        "    font-weight: bold;\n" + 
+        "    position: absolute;\n" + 
+        "    top: 15px;\n" + 
+        "    left: 20px;\n" + 
+        "    padding: 10px;\n" + 
+        "    border-radius: 50px;\n" + 
+        "    text-align: center;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_optionsUI_divider {\n" + 
+        "    position: absolute;\n" + 
+        "    top: 10px;\n" + 
+        "    left: 230px;\n" + 
+        "    font-size: 40px;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_urlfield {\n" + 
+        "    position: absolute;\n" + 
+        "    top: 15px;\n" + 
+        "    left: 260px;\n" + 
+        "    width: 240px;\n" + 
+        "    height: 40px;\n" + 
+        "    border: 1px solid rgb(0, 0, 0);\n" + 
+        "    outline: none;\n" + 
+        "    padding-left: 10px;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_gobtn {\n" + 
+        "    cursor: pointer;\n" + 
+        "    background-color: rgb(0, 0, 0);\n" + 
+        "    color: rgb(255, 255, 255);\n" + 
+        "    border-radius: 11px;\n" + 
+        "    padding: 10px;\n" + 
+        "    position: absolute;\n" + 
+        "    left: 520px;\n" + 
+        "    top: 15px;\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_closebtn {\n" + 
+        "    cursor: pointer;\n" + 
+        "    border-radius: 100px;\n" + 
+        "    border: 1px solid rgb(0, 0, 0);\n" + 
+        "    background-color: rgb(255, 255, 255);\n" + 
+        "    position: absolute;\n" + 
+        "    top: -25px;\n" + 
+        "    right: -25px;\n" + 
+        "    width: 40px;\n" + 
+        "    height: 40px;\n" + 
+        "    text-align: center;\n" + 
+        "    font-size: 30px;\n" + 
+        "}\n"
         loadCSS(theCSS, "imageSearch_CSS");
     };
     injectCSS();
+
+    var showSearchOptions = function() {
+        var isDesktop = true;
+        if (document.querySelectorAll("#dimensionDiv")[0].offsetWidth < 801) {
+            isDesktop = false;
+        }
+        if (!isDesktop) {
+            $("#fileinputfield")[0].click();
+            return;
+        }
+        $("#bodyMaskElement")[0].style.display = "block";
+        var optionsUI = document.createElement("div");
+        optionsUI.id = "is_optionsUI";
+
+        var uplButton = document.createElement("div");
+        uplButton.id = "is_uplBtn";
+        uplButton.innerHTML = "Upload Vehicle Picture";
+
+        uplButton.onclick = function() {
+            hideSearchOptions();
+            $("#fileinputfield")[0].click();
+        }
+        ;
+
+        var divider = document.createElement("div");
+        divider.id = "is_optionsUI_divider";
+        divider.innerHTML = "/";
+
+        var urlField = document.createElement("input");
+        urlField.id = "is_urlfield";
+        urlField.setAttribute("placeholder", "Enter an image url");
+
+        var goBtn = document.createElement("div");
+        goBtn.id = "is_gobtn";
+        goBtn.innerHTML = "Search";
+        goBtn.onclick = function() {
+            if ($("#thumbnailImage")[0]) {
+                $("#thumbnailImage")[0].parentNode.removeChild($("#thumbnailImage")[0]);
+            }
+
+            $("#searchBarDivider").removeClass("shiftRight");
+            $("input[name=searchQuery]").removeClass("shiftRight");
+
+            showProcessing(true);
+            analyzeImage(null, null, $("#is_urlfield")[0].value);
+            hideSearchOptions(true);
+        }
+        ;
+
+        var closeBtn = document.createElement("div");
+        closeBtn.id = "is_closebtn";
+        closeBtn.innerHTML = "&#215";
+        closeBtn.onclick = function() {
+            hideSearchOptions();
+        }
+        ;
+
+        optionsUI.appendChild(uplButton);
+        optionsUI.appendChild(divider);
+        optionsUI.appendChild(urlField);
+        optionsUI.appendChild(goBtn);
+        optionsUI.appendChild(closeBtn);
+
+        document.getElementsByTagName("body")[0].appendChild(optionsUI);
+    };
+
+    var hideSearchOptions = function(hideOnlyOptionsInterface) {
+        $("#is_optionsUI")[0].parentNode.removeChild($("#is_optionsUI")[0]);
+        if (hideOnlyOptionsInterface) {
+            return;
+        }
+        $("#bodyMaskElement")[0].style.display = "none";
+    };
 
     $("div.menu").css("flex-basis", "65%");
     new Image().src = "https://image-based-search.github.io/images/loading_spinner.gif";
@@ -599,7 +753,7 @@
     searchForm.parentNode.appendChild(frag);
 
     $("#imgSearchBtn").on("click", function(e) {
-        fileInputField.click();
+        showSearchOptions();
     });
 
     $("#fileinputfield").on("change", function(e) {
@@ -611,7 +765,7 @@
     bodyMask.style.top = bodyMask.style.right = bodyMask.style.bottom = bodyMask.style.left = "0px";
     bodyMask.style.opacity = 0.8;
     bodyMask.style.backgroundColor = "#000";
-    bodyMask.style.zIndex = Math.pow(2, 32) - 1;
+    bodyMask.style.zIndex = Math.pow(2, 28) - 1;
     bodyMask.style.display = "none";
     bodyMask.id = "bodyMaskElement";
     document.getElementsByTagName("body")[0].appendChild(bodyMask);
