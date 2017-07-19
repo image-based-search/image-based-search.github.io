@@ -340,7 +340,7 @@
         }
 
         xmlhttp.open("POST", "https://dev.sighthoundapi.com/v1/recognition?objectType=vehicle");
-        xmlhttp.setRequestHeader("X-Access-Token", "ZO0PdOzYeXQlsxtf4G3FhL9hoof5GuFP3Oz7");
+        xmlhttp.setRequestHeader("X-Access-Token", "O4D9yNhfQIXd1heixHy2s8S9iyJrAGVGe93Y");
         if (!imageurl) {
             xmlhttp.setRequestHeader("Content-type", "application/octet-stream");
         } else {
@@ -718,11 +718,21 @@
         $("#bodyMaskElement")[0].style.display = "none";
     };
 
+    var cacheImage = function(imgsrc){
+    	var t = document.createElement("img");
+    	t.src = imgsrc;
+    	t.style.width = t.style.height = "1px";
+    	t.style.display = "none";
+    	t.style.visibility = "hidden";
+    	document.getElementsByTagName("body")[0].appendChild(t);
+    };
+    
     $("div.menu").css("flex-basis", "65%");
-    new Image().src = "https://image-based-search.github.io/images/loading_spinner.gif";
-    new Image().src = "https://image-based-search.github.io/images/previewbox.png";
-    new Image().src = "https://image-based-search.github.io/images/err_processingreq.png";
-    new Image().src = "https://image-based-search.github.io/images/err_novehiclefound.png";
+    
+    cacheImage("https://image-based-search.github.io/images/loading_spinner.gif");
+    cacheImage("https://image-based-search.github.io/images/previewbox.png");
+    cacheImage("https://image-based-search.github.io/images/err_processingreq.png");
+    cacheImage("https://image-based-search.github.io/images/err_novehiclefound.png");
 
     var frag = document.createDocumentFragment();
     var searchForm = $("[name=searchQuery]").parents("form:eq(0)")[0];
