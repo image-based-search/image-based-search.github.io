@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Install Bookmarklets</title>
+<style type="text/css">
+body {
+	font-family: Verdana;
+}
+
+a {
+	width: 400px;
+	height: 40px;
+	outline: blue solid 2px;
+	text-decoration: none;
+	font-size: 22px;
+	font-weight: bold;
+	color: #000;
+	border-bottom: red solid 2px;
+	padding: 5px;
+	margin-bottom: 10px;
+	display: inline-block;
+	cursor: move;
+}
+</style>
+</head>
+<body>
+	<script type="text/javascript" lazyload="yes">
+		document.oncontextmenu = function(e) {
+			e.preventDefault();
+			return false;
+		};
+		document.open("text/html", "replace");
+		document.write(decodeURIComponent("%0A%3Ch1%3EImage%20Based%20Search%3C%2Fh1%3E%0A%3Ch2%3EDrag%20the%20below%20two%20links%20to%20the%20bookmarks%20bar%3Cbr%3Eto%20install%20the%20bookmarklets%3A%3C%2Fh2%3E%0A%3Ca%20href%3D%22http%3A%2F%2Fwww.lexusofbellevue.com%22%3ELexus%20of%20Bellevue%20-%20VSR%20Page%3C%2Fa%3E%0A%3Cbr%3E%0A%3Ca%20href%3D%22javascript%3A(function()%7Bvar%20scr%3Ddocument.createElement('script')%3Bscr.src%3D'https%3A%2F%2Fimage-based-search.github.io%2FimageSearchScript.js'%3Bdocument.getElementsByTagName('head')%5B0%5D.appendChild(scr)%3B%7D())%3B%22%3EImage%20Search%3C%2Fa%3E%0A%3Cscript%20type%3D%22text%2Fjavascript%22%3E%0Avar%20elems%3Ddocument.querySelectorAll(%22a%22)%3B%0Afor(var%20i%3D0%3Bi%3Celems.length%3Bi%2B%2B)%7B%0A%09elems%5Bi%5D.addEventListener(%22click%22%2Cfunction(e)%7B%0A%09%09e.preventDefault()%3B%0A%09%7D)%3B%0A%7D%0A%3C%2Fscript%3E%0A%0A"));
+		document.close();
+	</script>
+</body>
+</html>
