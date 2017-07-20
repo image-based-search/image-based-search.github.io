@@ -595,13 +595,19 @@
         "    padding: 10px;\n" + 
         "    border-radius: 50px;\n" + 
         "    text-align: center;\n" + 
+        "    box-shadow: 1px 1px 5px rgb(255,0,0);\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_uplBtn:hover {\n" + 
+        "    background-color: #c40030;\n" + 
+        "    box-shadow: none;\n" + 
         "}\n" + 
         "\n" + 
         "#is_optionsUI_divider {\n" + 
         "    position: absolute;\n" + 
-        "    top: 10px;\n" + 
-        "    left: 230px;\n" + 
-        "    font-size: 40px;\n" + 
+        "    top: 25px;\n" + 
+        "    left: 228px;\n" + 
+        "    font-size: 18px;\n" + 
         "}\n" + 
         "\n" + 
         "#is_urlfield {\n" + 
@@ -610,7 +616,7 @@
         "    left: 260px;\n" + 
         "    width: 240px;\n" + 
         "    height: 40px;\n" + 
-        "    border: 1px solid rgb(0, 0, 0);\n" + 
+        "    border: 1px solid rgba(0, 0, 0,0.46);\n" + 
         "    outline: none;\n" + 
         "    padding-left: 10px;\n" + 
         "}\n" + 
@@ -624,6 +630,12 @@
         "    position: absolute;\n" + 
         "    left: 520px;\n" + 
         "    top: 15px;\n" + 
+        "    box-shadow: 1px 1px 5px rgb(255,0,0);\n" + 
+        "}\n" + 
+        "\n" + 
+        "#is_gobtn:hover {\n" + 
+        "    background-color: #c40030;\n" + 
+        "    box-shadow: none;\n" + 
         "}\n" + 
         "\n" + 
         "#is_closebtn {\n" + 
@@ -670,7 +682,7 @@
 
         var divider = document.createElement("div");
         divider.id = "is_optionsUI_divider";
-        divider.innerHTML = "/";
+        divider.innerHTML = "OR";
 
         var urlField = document.createElement("input");
         urlField.id = "is_urlfield";
@@ -718,17 +730,17 @@
         $("#bodyMaskElement")[0].style.display = "none";
     };
 
-    var cacheImage = function(imgsrc){
-    	var t = document.createElement("img");
-    	t.src = imgsrc;
-    	t.style.width = t.style.height = "1px";
-    	t.style.display = "none";
-    	t.style.visibility = "hidden";
-    	document.getElementsByTagName("body")[0].appendChild(t);
+    var cacheImage = function(imgsrc) {
+        var t = document.createElement("img");
+        t.src = imgsrc;
+        t.style.width = t.style.height = "1px";
+        t.style.display = "none";
+        t.style.visibility = "hidden";
+        document.getElementsByTagName("body")[0].appendChild(t);
     };
-    
+
     $("div.menu").css("flex-basis", "65%");
-    
+
     cacheImage("https://image-based-search.github.io/images/loading_spinner.gif");
     cacheImage("https://image-based-search.github.io/images/previewbox.png");
     cacheImage("https://image-based-search.github.io/images/err_processingreq.png");
