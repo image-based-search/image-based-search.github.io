@@ -595,12 +595,10 @@
         "    padding: 10px;\n" + 
         "    border-radius: 50px;\n" + 
         "    text-align: center;\n" + 
-        "    box-shadow: 1px 1px 5px rgb(255,0,0);\n" + 
         "}\n" + 
         "\n" + 
         "#is_uplBtn:hover {\n" + 
         "    background-color: #c40030;\n" + 
-        "    box-shadow: none;\n" + 
         "}\n" + 
         "\n" + 
         "#is_optionsUI_divider {\n" + 
@@ -630,12 +628,10 @@
         "    position: absolute;\n" + 
         "    left: 520px;\n" + 
         "    top: 15px;\n" + 
-        "    box-shadow: 1px 1px 5px rgb(255,0,0);\n" + 
         "}\n" + 
         "\n" + 
         "#is_gobtn:hover {\n" + 
         "    background-color: #c40030;\n" + 
-        "    box-shadow: none;\n" + 
         "}\n" + 
         "\n" + 
         "#is_closebtn {\n" + 
